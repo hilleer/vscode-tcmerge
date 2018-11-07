@@ -10,14 +10,25 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:extension.sayHello",
+        "onCommand:extension.commitAndPush",
+        "onCommand:extension.createPullRequest"
     ],
     "main": "./out/extension",
+    "publisher": "Daniel Hillmann",
     "contributes": {
         "commands": [
             {
                 "command": "extension.sayHello",
                 "title": "Hello World"
+            },
+            {
+                "command": "extension.commitAndPush",
+                "title": "Git: Commit and push"
+            },
+            {
+                "command": "extension.createPullRequest",
+                "title": "Git: Create pull request"
             }
         ]
     },
@@ -34,5 +45,9 @@
         "tslint": "^5.8.0",
         "@types/node": "^8.10.25",
         "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "@types/node-fetch": "2.1.2",
+        "node-fetch": "2.2.1"
     }
 }

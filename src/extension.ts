@@ -1,27 +1,40 @@
 'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+// import activations from 'activations.json';
+
 export function activate(context: vscode.ExtensionContext) {
 
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "vscode-git" is now active!');
+	console.log('Congratulations, your extension "vscode-git" is now active!');
+	let disposable = vscode.commands.registerCommand('extension.sayHello', () => {
+		// The code you place here will be executed every time your command is executed
 
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.sayHello', () => {
-        // The code you place here will be executed every time your command is executed
+		// Display a message box to the user
+		vscode.window.showInformationMessage('Hello World!');
+	});
 
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World!');
-    });
+	context.subscriptions.push(disposable);
 
-    context.subscriptions.push(disposable);
+	type Activation = {
+		activationPath: string;
+		activationName: string;
+	};
+
+	const activations: Activation[] = [
+		{ activationPath: './commands/commitAndPush', activationName: 'commitAndPush' },
+		{ activationPath: './commands/createPullRequest', activationName: 'createPullRequest'}
+	];
+
+	for (const activation of activations) {
+		const { activationPath, activationName } = activation;
+		const command = registerCommand(activationPath, activationName);
+		context.subscriptions.push(command);
+	}
+}
+
+function registerCommand(activationPath: string, activationName: string): vscode.Disposable {
+	const activation = require(activationPath);
+	return vscode.commands.registerCommand(`extension.${activationName}`, () => activation.main());
 }
 
 // this method is called when your extension is deactivated
