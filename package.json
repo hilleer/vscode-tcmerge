@@ -12,11 +12,36 @@
     "activationEvents": [
         "onCommand:extension.sayHello",
         "onCommand:extension.commitAndPush",
-        "onCommand:extension.createPullRequest"
+        "onCommand:extension.createPullRequest",
+        "workspaceContains:.git"
     ],
     "main": "./out/extension",
     "publisher": "Daniel Hillmann",
     "contributes": {
+        "configuration":[
+            {
+                "title": "vscode-git configuration",
+                "description": "configurationb for vscode-git extension",
+                "properties": {
+                    "vscode-git.repositoryName": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "default": null,
+                        "description": "repository name of the github repository"
+                    },
+                    "vscode-git.repositoryOwner": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "default": null,
+                        "description": "repository owner of the github repository"
+                    }
+                }
+            }
+        ],
         "commands": [
             {
                 "command": "extension.sayHello",

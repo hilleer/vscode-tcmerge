@@ -2,8 +2,10 @@
 import * as vscode from 'vscode';
 
 // import activations from 'activations.json';
+import setGithubRepoInfo from './setGithubRepoInfo'
 
 export function activate(context: vscode.ExtensionContext) {
+	setGithubRepoInfo();
 
 	console.log('Congratulations, your extension "vscode-git" is now active!');
 	let disposable = vscode.commands.registerCommand('extension.sayHello', () => {
