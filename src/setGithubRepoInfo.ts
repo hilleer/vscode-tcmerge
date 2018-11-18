@@ -1,21 +1,26 @@
+import { window } from 'vscode';
+
 import {
 	getGithubRepositoryInfo
 } from './utils/git';
-import { isConfigSet, getWorkspaceConfig } from './utils/config';
+import {
+	isConfigSet,
+	getWorkspaceConfig,
+	updateConfig
+} from './utils/config';
 
 export default async function(): Promise<void> {
-	const config = getWorkspaceConfig();
-	console.log('configuration: ', config);
-	const gitInfo = await getGithubRepositoryInfo();
-	const configIsSet = isConfigSet(config);
-	console.log('set?', configIsSet);
+	const workspaceConfig = getWorkspaceConfig();
+	const configIsSet = isConfigSet(workspaceConfig);
 
-	try {
-		// await configuration.update(VscodeGitConfig.name, gitInfo.origin);
-		// await configuration.update(VscodeGitConfig.owner, gitInfo.owner);
-	} catch (error) {
-		console.log('error: ', error);
+	if (!configIsSet) {
+		window.showInformationMessage('Config for GitHub repository not properly set. Trying to update it automatically....');
+		try {
+			const gitInfo = await getGithubRepositoryInfo();
+			await updateConfig({ workspaceConfig, origin: gitInfo.origin, owner: gitInfo.owner });
+		} catch (error) {
+			console.error('error: ', error);
+			window.showWarningMessage('Something went wrong trying to update GitHub repository info....');
+		}
 	}
-
-	console.log('git info owner: ', gitInfo);
 }

@@ -9,7 +9,7 @@ export function executeTerminalCommand(cmd: string, cmdArgs?: any[], opts?: any)
 	return new Promise((resolve, reject) => {
 		execFile(cmd, cmdArgs, opts, (err, stdout, stderr) => {
 			if (err) {
-				reject(err)
+				reject(err);
 			}
 			if (stderr) {
 				console.log(stderr);

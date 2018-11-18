@@ -2,13 +2,13 @@
 import * as vscode from 'vscode';
 
 // import activations from 'activations.json';
-import setGithubRepoInfo from './setGithubRepoInfo'
+import setGithubRepoInfo from './setGithubRepoInfo';
 
 export function activate(context: vscode.ExtensionContext) {
 	setGithubRepoInfo();
 
 	console.log('Congratulations, your extension "vscode-git" is now active!');
-	let disposable = vscode.commands.registerCommand('extension.sayHello', () => {
+	const disposable = vscode.commands.registerCommand('extension.sayHello', () => {
 		// The code you place here will be executed every time your command is executed
 
 		// Display a message box to the user
@@ -24,7 +24,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const activations: Activation[] = [
 		{ activationPath: './commands/commitAndPush', activationName: 'commitAndPush' },
-		{ activationPath: './commands/createPullRequest', activationName: 'createPullRequest'}
+		{ activationPath: './commands/createPullRequest', activationName: 'createPullRequest' },
+		{ activationPath: './commands/updateGithubConfig', activationName: 'updateGithubConfig' }
 	];
 
 	for (const activation of activations) {

@@ -13,6 +13,7 @@
         "onCommand:extension.sayHello",
         "onCommand:extension.commitAndPush",
         "onCommand:extension.createPullRequest",
+        "onCommand:extension.updateGithubConfig",
         "workspaceContains:.git"
     ],
     "main": "./out/extension",
@@ -54,6 +55,10 @@
             {
                 "command": "extension.createPullRequest",
                 "title": "Git: Create pull request"
+            },
+            {
+                "command": "extension.updateGithubConfig",
+                "title": "Git: Update configuration info"
             }
         ]
     },
