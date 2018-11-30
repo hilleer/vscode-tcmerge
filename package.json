@@ -19,7 +19,7 @@
     "main": "./out/extension",
     "publisher": "Daniel Hillmann",
     "contributes": {
-        "configuration":[
+        "configuration": [
             {
                 "title": "vscode-git configuration",
                 "description": "configurationb for vscode-git extension",

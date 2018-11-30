@@ -29,10 +29,11 @@ export async function getCurrentBranch(): Promise<string> {
 		'--short',
 		'HEAD'
 	];
-	return await executeTerminalCommand(GIT_COMMAND, args);
+	const branch: string = await executeTerminalCommand(GIT_COMMAND, args);
+	return branch.trim();
 }
 
-export async function shouldSetUpstreamBranch(branch: string): Promise<boolean> {
+export async function shouldSetUpstreamBranch(): Promise<boolean> {
 	const args = [
 		'status',
 		'-sb'

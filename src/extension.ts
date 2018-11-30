@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 
 // import activations from 'activations.json';
 import setGithubRepoInfo from './setGithubRepoInfo';
+import { GITHUB_BASE_API_URL, GITHUB_TOKEN } from './utils/github';
 
 export function activate(context: vscode.ExtensionContext) {
 	setGithubRepoInfo();
@@ -20,24 +21,25 @@ export function activate(context: vscode.ExtensionContext) {
 	type Activation = {
 		activationPath: string;
 		activationName: string;
+		args: any
 	};
 
 	const activations: Activation[] = [
-		{ activationPath: './commands/commitAndPush', activationName: 'commitAndPush' },
-		{ activationPath: './commands/createPullRequest', activationName: 'createPullRequest' },
-		{ activationPath: './commands/updateGithubConfig', activationName: 'updateGithubConfig' }
+		{ activationPath: './commands/commitAndPush', activationName: 'commitAndPush', args: {} },
+		{ activationPath: './commands/createPullRequest', activationName: 'createPullRequest', args: { GITHUB_BASE_API_URL, GITHUB_TOKEN } },
+		{ activationPath: './commands/updateGithubConfig', activationName: 'updateGithubConfig', args: {} }
 	];
 
 	for (const activation of activations) {
-		const { activationPath, activationName } = activation;
-		const command = registerCommand(activationPath, activationName);
+		const { activationPath, activationName, args } = activation;
+		const command = registerCommand(activationPath, activationName, args);
 		context.subscriptions.push(command);
 	}
 }
 
-function registerCommand(activationPath: string, activationName: string): vscode.Disposable {
+function registerCommand(activationPath: string, activationName: string, args: any): vscode.Disposable {
 	const activation = require(activationPath);
-	return vscode.commands.registerCommand(`extension.${activationName}`, () => activation.main());
+	return vscode.commands.registerCommand(`extension.${activationName}`, () => activation.main(args));
 }
 
 // this method is called when your extension is deactivated

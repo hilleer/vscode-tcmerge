@@ -28,7 +28,6 @@ export async function main() {
 
 	try {
 		if (currentBranch !== selectedBranch) {
-			console.log('checking out to branch');
 			await checkoutToBranch(selectedBranch);
 		}
 		await stageChanges();
@@ -62,7 +61,8 @@ async function pushChanges(branch: string) {
 	const args = [
 		'push'
 	];
-	const upstreamIsSet: boolean = await shouldSetUpstreamBranch(branch);
+	const upstreamIsSet: boolean = await shouldSetUpstreamBranch();
+	console.log('upstream set: ', upstreamIsSet);
 	if (!upstreamIsSet) {
 		args.push('--set-upstream');
 		args.push('origin');
