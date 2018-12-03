@@ -13,7 +13,8 @@
         "onCommand:extension.sayHello",
         "onCommand:extension.commitAndPush",
         "onCommand:extension.createPullRequest",
-        "onCommand:extension.updateGithubConfig",
+		"onCommand:extension.createReadyBranch",
+		"onCommand:extension.updateGithubConfig",
         "workspaceContains:.git"
     ],
     "main": "./out/extension",
@@ -59,7 +60,11 @@
             {
                 "command": "extension.updateGithubConfig",
                 "title": "Git: Update configuration info"
-            }
+			},
+			{
+				"command": "extension.createReadyBranch",
+				"title": "Git: Create ready branch"
+			}
         ]
     },
     "scripts": {

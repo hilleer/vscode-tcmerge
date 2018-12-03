@@ -3,31 +3,26 @@ import * as vscode from 'vscode';
 
 // import activations from 'activations.json';
 import setGithubRepoInfo from './setGithubRepoInfo';
-import { GITHUB_BASE_API_URL, GITHUB_TOKEN } from './utils/github';
+import Github from './utils/github';
+export const GITHUB_BASE_API_URL = 'https://api.github.com';
+export const GITHUB_TOKEN = 'e0d9f866eca8cfdcd66391f4a967f46ebe7451f2';
+
+type Activation = {
+	activationPath: string;
+	activationName: string;
+	args: any
+};
 
 export function activate(context: vscode.ExtensionContext) {
 	setGithubRepoInfo();
 
-	console.log('Congratulations, your extension "vscode-git" is now active!');
-	const disposable = vscode.commands.registerCommand('extension.sayHello', () => {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
-
-	context.subscriptions.push(disposable);
-
-	type Activation = {
-		activationPath: string;
-		activationName: string;
-		args: any
-	};
+	const github = new Github(GITHUB_TOKEN, GITHUB_BASE_API_URL);
 
 	const activations: Activation[] = [
 		{ activationPath: './commands/commitAndPush', activationName: 'commitAndPush', args: {} },
-		{ activationPath: './commands/createPullRequest', activationName: 'createPullRequest', args: { GITHUB_BASE_API_URL, GITHUB_TOKEN } },
-		{ activationPath: './commands/updateGithubConfig', activationName: 'updateGithubConfig', args: {} }
+		{ activationPath: './commands/createPullRequest', activationName: 'createPullRequest', args: { github } },
+		{ activationPath: './commands/createReadyBranch', activationName: 'createReadyBranch', args: {} },
+		{ activationPath: './commands/updateGithubConfig', activationName: 'updateGithubConfig', args: {} },
 	];
 
 	for (const activation of activations) {

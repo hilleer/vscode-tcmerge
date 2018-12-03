@@ -4,12 +4,12 @@ import {
 	getWorkspaceConfig,
 	updateConfig
 } from '../utils/config';
-import { getGithubRepositoryInfo } from '../utils/git';
+import { getGitRepositoryInfo } from '../utils/git';
 
 export async function main() {
 	const workspaceConfig = getWorkspaceConfig();
 	try {
-		const gitInfo = await getGithubRepositoryInfo();
+		const gitInfo = await getGitRepositoryInfo();
 		const { owner, origin } = gitInfo;
 		await updateConfig({ workspaceConfig, owner, origin });
 	} catch (error) {

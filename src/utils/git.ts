@@ -7,7 +7,7 @@ interface RepositoryInfo {
 	origin: string;
 }
 
-export async function getGithubRepositoryInfo(): Promise<RepositoryInfo> {
+export async function getGitRepositoryInfo(): Promise<RepositoryInfo> {
 	const extractInfoRegex = /git@github\.com:([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)\.git/;
 
 	const cmdArgs = [
@@ -39,7 +39,6 @@ export async function shouldSetUpstreamBranch(): Promise<boolean> {
 		'-sb'
 	];
 	const status = await executeTerminalCommand(GIT_COMMAND, args);
-	console.log('status: ', status);
 	const regex = /## [\w-_]*\.{3}origin\/[\w-_]*/;
 	return regex.test(status);
 }

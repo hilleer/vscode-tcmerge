@@ -1,7 +1,7 @@
 import { window } from 'vscode';
 
 import {
-	getGithubRepositoryInfo
+	getGitRepositoryInfo
 } from './utils/git';
 import {
 	isConfigSet,
@@ -16,7 +16,7 @@ export default async function(): Promise<void> {
 	if (!configIsSet) {
 		window.showInformationMessage('Config for GitHub repository not properly set. Trying to update it automatically....');
 		try {
-			const gitInfo = await getGithubRepositoryInfo();
+			const gitInfo = await getGitRepositoryInfo();
 			await updateConfig({ workspaceConfig, origin: gitInfo.origin, owner: gitInfo.owner });
 		} catch (error) {
 			console.error('error: ', error);

@@ -23,9 +23,6 @@ export async function main() {
 
 	selectedBranch = await setSelectedBranch(currentBranch, inputCommitInfo);
 
-
-	console.log('selected branch: ', selectedBranch);
-
 	try {
 		if (currentBranch !== selectedBranch) {
 			await checkoutToBranch(selectedBranch);
@@ -62,7 +59,7 @@ async function pushChanges(branch: string) {
 		'push'
 	];
 	const upstreamIsSet: boolean = await shouldSetUpstreamBranch();
-	console.log('upstream set: ', upstreamIsSet);
+
 	if (!upstreamIsSet) {
 		args.push('--set-upstream');
 		args.push('origin');
