@@ -1,5 +1,4 @@
 import { window } from 'vscode';
-import fetch from 'node-fetch';
 
 import { getCurrentBranch } from '../utils/git';
 import Github, { } from '../utils/Github';
