@@ -19,7 +19,7 @@ enum ConfigOption {
 }
 
 export function getWorkspaceConfig(): ExtensionWorkspaceConfig {
-	return workspace.getConfiguration('vscode-git');
+	return workspace.getConfiguration('vscode-tcmerge');
 }
 
 export function isConfigSet(config: ExtensionWorkspaceConfig): boolean {

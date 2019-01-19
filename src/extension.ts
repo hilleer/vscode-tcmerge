@@ -1,28 +1,28 @@
 'use strict';
 import * as vscode from 'vscode';
 
-// import activations from 'activations.json';
 import setGithubRepoInfo from './setGithubRepoInfo';
-import Github from './utils/github';
-export const GITHUB_BASE_API_URL = 'https://api.github.com';
-export const GITHUB_TOKEN = 'e0d9f866eca8cfdcd66391f4a967f46ebe7451f2';
+import Github from './services/Github';
+import AccessToken from './services/AccessToken';
 
 type Activation = {
 	activationPath: string;
 	activationName: string;
-	args: any
+	args?: any
 };
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 	setGithubRepoInfo();
-
-	const github = new Github(GITHUB_TOKEN, GITHUB_BASE_API_URL);
+	const accessToken = new AccessToken();
+	const github = new Github();
 
 	const activations: Activation[] = [
 		{ activationPath: './commands/commitAndPush', activationName: 'commitAndPush', args: {} },
-		{ activationPath: './commands/createPullRequest', activationName: 'createPullRequest', args: { github } },
 		{ activationPath: './commands/createReadyBranch', activationName: 'createReadyBranch', args: {} },
 		{ activationPath: './commands/updateGithubConfig', activationName: 'updateGithubConfig', args: {} },
+		{ activationPath: './commands/setAccessToken', activationName: 'setAccessToken', args: { accessToken } },
+		{ activationPath: './commands/createPullRequest', activationName: 'createPullRequest', args: { github, accessToken } },
+		{ activationPath: './commands/deleteAccessToken', activationName: 'deleteAccessToken', args: { accessToken } }
 	];
 
 	for (const activation of activations) {

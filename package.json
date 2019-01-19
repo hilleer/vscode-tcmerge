@@ -1,6 +1,6 @@
 {
-    "name": "vscode-git",
-    "displayName": "vscode-git",
+    "name": "vscode-tcmerge",
+    "displayName": "vscode-tcmerge",
     "description": "easily integrate git with vscode",
     "version": "0.0.1",
     "engines": {
@@ -13,8 +13,10 @@
         "onCommand:extension.sayHello",
         "onCommand:extension.commitAndPush",
         "onCommand:extension.createPullRequest",
-		"onCommand:extension.createReadyBranch",
+        "onCommand:extension.createReadyBranch",
 		"onCommand:extension.updateGithubConfig",
+		"onCommand:extension.setAccessToken",
+		"onCommand:extension.deleteAccessToken",
         "workspaceContains:.git"
     ],
     "main": "./out/extension",
@@ -22,10 +24,10 @@
     "contributes": {
         "configuration": [
             {
-                "title": "vscode-git configuration",
-                "description": "configurationb for vscode-git extension",
+                "title": "vscode-tcmerge configuration",
+                "description": "configuration for vscode-tcmerge extension",
                 "properties": {
-                    "vscode-git.repositoryName": {
+                    "vscode-tcmerge.repositoryName": {
                         "type": [
                             "string",
                             "null"
@@ -33,7 +35,7 @@
                         "default": null,
                         "description": "repository name of the github repository"
                     },
-                    "vscode-git.repositoryOwner": {
+                    "vscode-tcmerge.repositoryOwner": {
                         "type": [
                             "string",
                             "null"
@@ -51,19 +53,27 @@
             },
             {
                 "command": "extension.commitAndPush",
-                "title": "Git: Commit and push"
+                "title": "tcmerge: Commit and push"
             },
             {
                 "command": "extension.createPullRequest",
-                "title": "Git: Create pull request"
+                "title": "tcmerge: Create pull request"
             },
             {
                 "command": "extension.updateGithubConfig",
-                "title": "Git: Update configuration info"
+                "title": "tcmerge: Update configuration info"
+            },
+            {
+                "command": "extension.createReadyBranch",
+                "title": "tcmerge: Create ready branch"
 			},
 			{
-				"command": "extension.createReadyBranch",
-				"title": "Git: Create ready branch"
+				"command": "extension.setAccessToken",
+				"title": "tcmerge: Set Github access token"
+			},
+			{
+				"command": "extension.deleteAccessToken",
+				"title": "tcmerge: Delete access token"
 			}
         ]
     },
@@ -75,14 +85,16 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.21",
-        "tslint": "^5.8.0",
-        "@types/node": "^8.10.25",
-        "@types/mocha": "^2.2.42"
+        "typescript": "2.6.1",
+        "vscode": "1.1.21",
+        "tslint": "5.8.0",
+        "@types/node": "8.10.25",
+        "@types/mocha": "2.2.42"
     },
     "dependencies": {
         "@types/node-fetch": "2.1.2",
-        "node-fetch": "2.2.1"
+        "@types/open": "0.0.29",
+        "node-fetch": "2.2.1",
+        "open": "0.0.5"
     }
 }

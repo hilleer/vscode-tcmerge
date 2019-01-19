@@ -51,6 +51,7 @@ async function commitChanges(commitMessage: string) {
 		'-m',
 		commitMessage
 	];
+
 	await executeTerminalCommand(GIT_COMMAND, args);
 }
 

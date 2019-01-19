@@ -2,20 +2,17 @@
 // export const GITHUB_TOKEN = 'e0d9f866eca8cfdcd66391f4a967f46ebe7451f2';
 import fetch from 'node-fetch';
 
-// export function getGithubToken(): string {
-
-// }
+const GITHUB_BASE_API_URL = 'https://api.github.com';
 
 export default class Github {
-	private token: string;
 	private baseApiUrl: string;
-	constructor(GITHUB_TOKEN: string, GITHUB_BASE_API_URL: string) {
-		this.token = GITHUB_TOKEN;
+
+	constructor() {
 		this.baseApiUrl = GITHUB_BASE_API_URL;
 	}
 
-	public async createPullRequest(title: string, head: string) {
-		const res = await fetch(`${this.baseApiUrl}/repos/hilleer/vscode-nocms-test/pulls?access_token=${this.token}`, {
+	public async createPullRequest(title: string, head: string, accessToken: string) {
+		const res = await fetch(`${this.baseApiUrl}/repos/hilleer/vscode-nocms-test/pulls?access_token=${accessToken}`, {
 			method: 'post',
 			body: JSON.stringify({
 				title, // required; Title of the pull request: string
@@ -24,11 +21,15 @@ export default class Github {
 				maintainer_can_modify: true
 			})
 		});
-		return res.json();
+		const json = await res.json();
+		if (json.message && json.message === 'Validation Failed') {
+			throw json.errors[0].message;
+		}
+		return json;
 	}
 
-	public async listPullRequests() {
-		const res = await fetch(`${this.baseApiUrl}/repos/hilleer/vscode-nocms-test/pulls?access_token=${this.token}`);
+	public async listPullRequests(accessToken: string) {
+		const res = await fetch(`${this.baseApiUrl}/repos/hilleer/vscode-nocms-test/pulls?access_token=${accessToken}`);
 		return res.json();
 	}
 }
