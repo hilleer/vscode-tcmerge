@@ -9,7 +9,7 @@ This extension contributes the following settings:
 * `vscode-tcmerge.repositoryName` - name of the repository.
 * `vscode-tcmerge.repositoryOwner` - owner of the repository.
 
-They are automatically set loading the extension for the first time, but can be updated manually or automatically using the command [tcmerge: Update git info](https://github.com/hilleer/vscode-tcmerge#tcmerge: Update git info).
+They are automatically set loading the extension for the first time, but can be updated manually or automatically using the command [tcmerge: Update git info](https://github.com/hilleer/vscode-tcmerge#user-content-tcmerge-update-git-info).
 
 These settings a required for certain commands.
 
