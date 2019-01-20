@@ -91,5 +91,12 @@
         "@types/open": "0.0.29",
         "node-fetch": "2.2.1",
         "open": "0.0.5"
-    }
+	},
+	"repository": {
+		"url": "https://github.com/hilleer/vscode-tcmerge",
+		"type": "git"
+	},
+	"bugs": {
+		"url": "https://github.com/hilleer/vscode-tcmerge/issues/new"
+	}
 }
