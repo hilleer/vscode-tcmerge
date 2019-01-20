@@ -20,9 +20,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		{ activationPath: './commands/commitAndPush', activationName: 'commitAndPush', args: {} },
 		{ activationPath: './commands/createReadyBranch', activationName: 'createReadyBranch', args: {} },
 		{ activationPath: './commands/updateGithubConfig', activationName: 'updateGithubConfig', args: {} },
-		{ activationPath: './commands/setAccessToken', activationName: 'setAccessToken', args: { accessToken } },
+		{ activationPath: './commands/accessToken', activationName: 'accessToken', args: { accessToken } },
 		{ activationPath: './commands/createPullRequest', activationName: 'createPullRequest', args: { github, accessToken } },
-		{ activationPath: './commands/deleteAccessToken', activationName: 'deleteAccessToken', args: { accessToken } }
 	];
 
 	for (const activation of activations) {

@@ -15,8 +15,7 @@
         "onCommand:extension.createPullRequest",
         "onCommand:extension.createReadyBranch",
 		"onCommand:extension.updateGithubConfig",
-		"onCommand:extension.setAccessToken",
-		"onCommand:extension.deleteAccessToken",
+		"onCommand:extension.accessToken",
         "workspaceContains:.git"
     ],
     "main": "./out/extension",
@@ -61,19 +60,15 @@
             },
             {
                 "command": "extension.updateGithubConfig",
-                "title": "tcmerge: Update configuration info"
+                "title": "tcmerge: Update git info"
             },
             {
                 "command": "extension.createReadyBranch",
                 "title": "tcmerge: Create ready branch"
 			},
 			{
-				"command": "extension.setAccessToken",
-				"title": "tcmerge: Set Github access token"
-			},
-			{
-				"command": "extension.deleteAccessToken",
-				"title": "tcmerge: Delete access token"
+				"command": "extension.accessToken",
+				"title": "tcmerge: Github access token"
 			}
         ]
     },

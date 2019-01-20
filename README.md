@@ -2,68 +2,50 @@
 
 This is the README for your extension "vscode-tcmerge". After writing up a brief description, we recommend including the following sections.
 
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
+## Extension settings
 
 This extension contributes the following settings:
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* `vscode-tcmerge.repositoryName` - name of the repository.
+* `vscode-tcmerge.repositoryOwner` - owner of the repository.
 
-## Known Issues
+They are automatically set loading the extension for the first time, but can be updated manually or automatically using the command [tcmerge: Update git info](https://github.com/hilleer/vscode-tcmerge#tcmerge: Update git info).
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+These settings a required for certain commands.
 
-## Release Notes
+## Commands
 
-Users appreciate release notes as you update your extension.
+### tcmerge: commit and push
 
-### 1.0.0
+Selection this command will stage, commit and push all changes using a provided commit/branch input.
 
-Initial release of ...
+The input will replace all spaces so that its valid as a branch name.
 
-### 1.0.1
+### tcmerge: Create pull request
 
-Fixed issue #.
+Will create a pull request of the branch, using input as description for the pull request.
 
-### 1.1.0
+### tcmerge: Create ready branch
 
-Added features X, Y, and Z.
+Creates a ready branch of your branch that your build server is listening for.
 
------------------------------------------------------------------------------------------------------------
+That is, it will a push a branch `ready/<current-branch-name>/<timestamp>`.
 
-## Working with Markdown
+### tcmerge: Github access token
 
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
+Contributes multiple selections.
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
+In case you have not already saved an access token for GitHub:
 
-### For more information
+* set access token.
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+In case you have already saved an access token for GitHub:
 
-**Enjoy!**
+* `Delete access token` - will remove the access token from storage. This command cannot be reverted.
+* `Update access token` - will update the access token accordingly to a given input. This command cannot be reverted.
 
+### tcmerge: Update git info
 
+Updates the repository info saved in the extension config (`.vscode/settings.json`).
 
-e0d9f866eca8cfdcd66391f4a967f46ebe7451f2
+This information is initially set automatically when loading the extension and is required for multiple commands to work.
