@@ -1,6 +1,6 @@
-# vscode-tcmerge README
+# vscode-tcmerge
 
-This is the README for your extension "vscode-tcmerge". After writing up a brief description, we recommend including the following sections.
+vscode extension to simplify git commands to easily push and deploy your changes.
 
 ## Extension settings
 
