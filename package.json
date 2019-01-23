@@ -10,7 +10,6 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello",
         "onCommand:extension.commitAndPush",
         "onCommand:extension.createPullRequest",
         "onCommand:extension.createReadyBranch",
@@ -46,10 +45,6 @@
             }
         ],
         "commands": [
-            {
-                "command": "extension.sayHello",
-                "title": "Hello World"
-            },
             {
                 "command": "extension.commitAndPush",
                 "title": "tcmerge: Commit and push"
