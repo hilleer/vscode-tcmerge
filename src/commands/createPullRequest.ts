@@ -1,25 +1,36 @@
 import { window } from 'vscode';
+import open from 'open';
 
 import { getCurrentBranch } from '../utils/git';
-import Github, { } from '../utils/Github';
+import Github, { } from '../services/Github';
+import AccessToken from '../services/AccessToken';
 
 type CreatePullRequest = {
 	github: Github;
+	accessToken: AccessToken;
 };
 
-export async function main({ github }: CreatePullRequest) {
+export async function main({ github, accessToken }: CreatePullRequest) {
+
+	const hasAccessToken = await accessToken.hasAccessToken();
+	if (!hasAccessToken) {
+		window.showInformationMessage('Access token not set. Please set it using command "tcmerge: Set Github access token" and try again');
+		return;
+	}
+	const githubAccessToken = await accessToken.getAccesstoken();
 	try {
 		const pullRequestTitle: string = await window.showInputBox({ prompt: 'Please type in the title of the pull-request', ignoreFocusOut: true });
 		if (!pullRequestTitle) {
 			return;
 		}
-		const pullRequests = await github.listPullRequests();
-		console.log('pullRequests: ', pullRequests);
 		const currentBranch = await getCurrentBranch();
-		const createdPullRequest = await github.createPullRequest(pullRequestTitle, currentBranch);
-		console.log('created pull request: ', createdPullRequest);
-		return;
+		const { html_url } = await github.createPullRequest(pullRequestTitle, currentBranch, githubAccessToken);
+		const selection = await window.showInformationMessage(`Successfully created pull request`, 'close', 'Open pull request');
+		if (selection === 'Open pull request') {
+			open(html_url)
+		}
 	} catch (error) {
-		throw error;
+		window.showErrorMessage(error);
+		return;
 	}
 }

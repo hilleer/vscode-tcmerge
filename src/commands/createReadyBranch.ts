@@ -23,14 +23,18 @@ export async function main({ }: CreateReadyBranch): Promise<void> {
 	const timestamp = Date.now();
 	const readyBranch = `ready/${currentBranch}/${timestamp}`;
 
-	await executeTerminalCommand(
-		'git',
-		[
-			'push',
-			'origin',
-			`${currentBranch}:${readyBranch}`
-		]
-	);
-	window.showInformationMessage('Successfully created ready branch!');
-	return;
+	try {
+		await executeTerminalCommand(
+			'git',
+			[
+				'push',
+				'origin',
+				`${currentBranch}:${readyBranch}`
+			]
+		);
+		window.showInformationMessage(`Successfully created ready branch of ${currentBranch}`);
+	} catch (error) {
+		window.showErrorMessage(error);
+		return;
+	}
 }

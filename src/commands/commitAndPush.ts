@@ -30,6 +30,7 @@ export async function main() {
 		await stageChanges();
 		await commitChanges(inputCommitInfo);
 		await pushChanges(selectedBranch);
+		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
 	} catch (error) {
 		console.error(error);
 		window.showWarningMessage('Something went wrong....');
@@ -51,6 +52,7 @@ async function commitChanges(commitMessage: string) {
 		'-m',
 		commitMessage
 	];
+
 	await executeTerminalCommand(GIT_COMMAND, args);
 }
 
