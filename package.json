@@ -19,7 +19,7 @@
         "workspaceContains:.git"
     ],
     "main": "./out/extension",
-    "publisher": "Daniel Hillmann",
+    "publisher": "hilleer",
     "contributes": {
         "configuration": [
             {
