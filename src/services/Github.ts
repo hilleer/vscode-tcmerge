@@ -25,6 +25,7 @@ export default class Github {
 		if (json.message && json.message === 'Validation Failed') {
 			throw json.errors[0].message;
 		}
+		console.log('json: ', json);
 		return json;
 	}
 

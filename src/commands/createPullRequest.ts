@@ -1,4 +1,5 @@
 import { window } from 'vscode';
+import open from 'open';
 
 import { getCurrentBranch } from '../utils/git';
 import Github, { } from '../services/Github';
@@ -22,13 +23,14 @@ export async function main({ github, accessToken }: CreatePullRequest) {
 		if (!pullRequestTitle) {
 			return;
 		}
-		const pullRequests = await github.listPullRequests(githubAccessToken);
-		console.log('pullRequests: ', pullRequests);
 		const currentBranch = await getCurrentBranch();
-		const createdPullRequest = await github.createPullRequest(pullRequestTitle, currentBranch, githubAccessToken);
-		console.log('created pull request: ', createdPullRequest);
-		return;
+		const { html_url } = await github.createPullRequest(pullRequestTitle, currentBranch, githubAccessToken);
+		const selection = await window.showInformationMessage(`Successfully created pull request`, 'close', 'Open pull request');
+		if (selection === 'Open pull request') {
+			open(html_url)
+		}
 	} catch (error) {
 		window.showErrorMessage(error);
+		return;
 	}
 }
