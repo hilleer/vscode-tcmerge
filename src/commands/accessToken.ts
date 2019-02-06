@@ -75,7 +75,7 @@ export async function getAccesstokenFromInput(): Promise<string> {
 	const openGithubSettings = await window.showInformationMessage('Create and copy-paste your personal access token on Github', 'Close', 'Open Github', 'Insert');
 
 	if (openGithubSettings.toLowerCase() === 'close') {
-		return '';
+		return undefined;
 	}
 
 	if (openGithubSettings.toLowerCase() === 'open github') {

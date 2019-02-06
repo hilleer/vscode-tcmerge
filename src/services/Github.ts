@@ -25,7 +25,9 @@ export default class Github {
 		if (json.message && json.message === 'Validation Failed') {
 			throw json.errors[0].message;
 		}
-		console.log('json: ', json);
+		if (json.message === 'Bad credentials') {
+			throw new Error('Github authorization failed. Please make sure your token was given necessary rights');
+		}
 		return json;
 	}
 
