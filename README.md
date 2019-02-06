@@ -39,6 +39,10 @@ In case you have not already saved an access token for GitHub:
 
 * set access token.
 
+It requires access to "repo". If you only expect to use public repositories, you can with "public repo".
+
+![github-access-token-setup.PNG](https://github.com/hilleer/vscode-tcmerge/blob/master/resources/github-access-token-setup.PNG)
+
 In case you have already saved an access token for GitHub:
 
 * `Delete access token` - will remove the access token from storage. This command cannot be reverted.
