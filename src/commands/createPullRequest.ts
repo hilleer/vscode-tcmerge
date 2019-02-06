@@ -24,10 +24,10 @@ export async function main({ github, accessToken }: CreatePullRequest) {
 			return;
 		}
 		const currentBranch = await getCurrentBranch();
-		const { html_url } = await github.createPullRequest(pullRequestTitle, currentBranch, githubAccessToken);
-		const selection = await window.showInformationMessage(`Successfully created pull request`, 'close', 'Open pull request');
+		const { html_url} = await github.createPullRequest(pullRequestTitle, currentBranch, githubAccessToken);
+		const selection = await window.showInformationMessage('Successfully created pull request!', 'close', 'Open pull request');
 		if (selection === 'Open pull request') {
-			open(html_url)
+			open(html_url);
 		}
 	} catch (error) {
 		window.showErrorMessage(error);
