@@ -74,11 +74,11 @@ async function contributeSetAccessToken(accessToken: AccessToken): Promise<void>
 export async function getAccesstokenFromInput(): Promise<string> {
 	const openGithubSettings = await window.showInformationMessage('Create and copy-paste your personal access token on Github', 'Close', 'Open Github', 'Insert');
 
-	if (openGithubSettings.toLowerCase() === 'close') {
+	if (openGithubSettings && openGithubSettings.toLowerCase() === 'close') {
 		return undefined;
 	}
 
-	if (openGithubSettings.toLowerCase() === 'open github') {
+	if (openGithubSettings && openGithubSettings.toLowerCase() === 'open github') {
 		open(GITHUB_ACCESS_TOKEN_URL);
 	}
 
@@ -95,7 +95,7 @@ export async function getAccesstokenFromInput(): Promise<string> {
 
 	if (/^\s*$/.test(inputAccessToken)) {
 		window.showWarningMessage('Empty access token was provided');
-		return '';
+		return undefined;
 	}
 	return inputAccessToken;
 }
