@@ -8,8 +8,6 @@ const unlinkAsync = promisify(unlink);
 
 const ACCESS_TOKEN_PATH = path.join(__dirname, '..', '..', 'accessToken.txt');
 
-console.log('ACCESS TOKEN PATH: ', ACCESS_TOKEN_PATH);
-
 export default class AccessToken {
 	public async hasAccessToken(): Promise<boolean> {
 		const accessToken = await this.readAccessTokenFile();
