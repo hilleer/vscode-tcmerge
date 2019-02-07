@@ -1,6 +1,6 @@
 # vscode-tcmerge
 
-vscode extension to simplify git commands to easily push and deploy your changes.
+This extension is highly inspired by the CLI package [tcmerge](https://github.com/debitoor/tcmerge).
 
 ## Extension settings
 
@@ -11,7 +11,7 @@ This extension contributes the following settings:
 
 They are automatically set loading the extension for the first time, but can be updated manually or automatically using the command [tcmerge: Update git info](https://github.com/hilleer/vscode-tcmerge#user-content-tcmerge-update-git-info).
 
-These settings a required for certain commands.
+These settings a required for certain commands to work.
 
 ## Commands
 

@@ -32,8 +32,7 @@ export async function main() {
 		await pushChanges(selectedBranch);
 		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
 	} catch (error) {
-		console.error(error);
-		window.showWarningMessage('Something went wrong....');
+		window.showWarningMessage(error);
 		return;
 	}
 }
@@ -82,7 +81,9 @@ async function checkoutToBranch(branch: string): Promise<void> {
 async function setSelectedBranch(currentBranch: string, commitMessage: string) {
 	const branchName = commitMessage.replace(/\s/g, '-');
 	if (/^master/.test(currentBranch)) {
-		const selection = await window.showInformationMessage(`Current branch is master. Do you want to push to ${branchName} instead?`, 'yes', 'no');
+		const selection = await window.showInformationMessage(
+			`Current branch is master. Do you want to push to ${branchName} instead?`, 'yes', 'no'
+		);
 		return selection === 'yes'
 			? branchName
 			: 'master';

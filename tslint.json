@@ -1,15 +1,88 @@
 {
+	"extends": "tslint:recommended",
+	"linterOptions": {
+		"exclude": [
+			"**/*.json"
+		]
+	},
 	"rules": {
-		"no-string-throw": true,
-		"no-unused-expression": true,
-		"no-duplicate-variable": true,
-		"curly": true,
+		"max-classes-per-file": false,
+		"interface-over-type-literal": false,
+		"interface-name": false,
+		"object-literal-key-quotes": [
+			true,
+			"as-needed"
+		],
+		"trailing-comma": false,
+		"ordered-imports": false,
+		"no-console": false,
+		"no-var-requires": false,
+		"max-line-length": {
+			"severity": "warn",
+			"options": [
+				120
+			]
+		},
+		"object-literal-sort-keys": false,
 		"class-name": true,
+		"comment-format": [
+			true,
+			"check-space"
+		],
+		"indent": [
+			true,
+			"tabs",
+			2
+		],
+		"one-line": [
+			true,
+			"check-whitespace"
+		],
+		"no-var-keyword": true,
+		"quotemark": [
+			true,
+			"single",
+			"avoid-escape"
+		],
 		"semicolon": [
 			true,
-			"always"
+			"always",
+			"ignore-bound-class-methods"
 		],
-		"triple-equals": true
-	},
-	"defaultSeverity": "warning"
+		"whitespace": [
+			true,
+			"check-branch",
+			"check-decl",
+			"check-operator",
+			"check-module",
+			"check-separator",
+			"check-type"
+		],
+		"typedef-whitespace": [
+			true,
+			{
+				"call-signature": "nospace",
+				"index-signature": "nospace",
+				"parameter": "nospace",
+				"property-declaration": "nospace",
+				"variable-declaration": "nospace"
+			},
+			{
+				"call-signature": "onespace",
+				"index-signature": "onespace",
+				"parameter": "onespace",
+				"property-declaration": "onespace",
+				"variable-declaration": "onespace"
+			}
+		],
+		"no-internal-module": true,
+		"no-trailing-whitespace": false,
+		"prefer-const": true,
+		"jsdoc-format": true,
+		"only-arrow-functions": false,
+		"eofline": false,
+		"arrow-parens": false,
+		"member-ordering": false,
+		"no-unused-expression": [true, "allow-fast-null-checks"]
+	}
 }
