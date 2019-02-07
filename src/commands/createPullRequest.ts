@@ -22,8 +22,8 @@ export async function main({ github, accessToken }: CreatePullRequest) {
 
 	const hasAccessToken = await accessToken.hasAccessToken();
 	if (!hasAccessToken) {
-		const continueCreatingPullRequest = await setAccessToken(accessToken);
-		if (!continueCreatingPullRequest) {
+		const shouldCreatePullRequest = await setAccessToken(accessToken);
+		if (!shouldCreatePullRequest) {
 			return;
 		}
 	}
