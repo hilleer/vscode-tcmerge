@@ -1,6 +1,6 @@
 import { window } from 'vscode';
-import open from 'open';
 import AccessToken from '../services/AccessToken';
+const opn = require('opn');
 
 const GITHUB_ACCESS_TOKEN_URL = 'https://github.com/settings/tokens/new';
 
@@ -79,7 +79,7 @@ export async function getAccesstokenFromInput(): Promise<string> {
 	}
 
 	if (openGithubSettings && openGithubSettings.toLowerCase() === 'open github') {
-		open(GITHUB_ACCESS_TOKEN_URL);
+		opn(GITHUB_ACCESS_TOKEN_URL);
 	}
 
 	const inputAccessToken = await window.showInputBox({
