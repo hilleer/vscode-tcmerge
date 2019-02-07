@@ -2,7 +2,7 @@
     "name": "vscode-tcmerge",
     "displayName": "vscode-tcmerge",
     "description": "easily integrate git and github with vscode",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "engines": {
         "vscode": "^1.28.0"
     },
@@ -13,8 +13,8 @@
         "onCommand:extension.commitAndPush",
         "onCommand:extension.createPullRequest",
         "onCommand:extension.createReadyBranch",
-		"onCommand:extension.updateGithubConfig",
-		"onCommand:extension.accessToken",
+        "onCommand:extension.updateGithubConfig",
+        "onCommand:extension.accessToken",
         "workspaceContains:.git"
     ],
     "main": "./out/extension",
@@ -60,11 +60,11 @@
             {
                 "command": "extension.createReadyBranch",
                 "title": "tcmerge: Create ready branch"
-			},
-			{
-				"command": "extension.accessToken",
-				"title": "tcmerge: Github access token"
-			}
+            },
+            {
+                "command": "extension.accessToken",
+                "title": "tcmerge: Github access token"
+            }
         ]
     },
     "scripts": {
@@ -75,7 +75,7 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "2.6.1",
+        "typescript": "2.9.0",
         "vscode": "1.1.21",
         "tslint": "5.8.0",
         "@types/node": "8.10.25",
@@ -83,15 +83,15 @@
     },
     "dependencies": {
         "@types/node-fetch": "2.1.2",
-        "@types/open": "0.0.29",
+        "@types/opn": "5.1.0",
         "node-fetch": "2.2.1",
-        "open": "0.0.5"
-	},
-	"repository": {
-		"url": "https://github.com/hilleer/vscode-tcmerge",
-		"type": "git"
-	},
-	"bugs": {
-		"url": "https://github.com/hilleer/vscode-tcmerge/issues/new"
-	}
+        "opn": "5.4.0"
+    },
+    "repository": {
+        "url": "https://github.com/hilleer/vscode-tcmerge",
+        "type": "git"
+    },
+    "bugs": {
+        "url": "https://github.com/hilleer/vscode-tcmerge/issues/new"
+    }
 }
