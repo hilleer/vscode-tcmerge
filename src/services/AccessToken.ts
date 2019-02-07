@@ -11,18 +11,13 @@ const ACCESS_TOKEN_PATH = path.join(__dirname, '..', '..', 'accessToken.txt');
 export default class AccessToken {
 	public async hasAccessToken(): Promise<boolean> {
 		const accessToken = await this.readAccessTokenFile();
-		if (accessToken.trim() === '') {
+		if (!accessToken || accessToken.trim() === '') {
 			return false;
 		}
 		return true;
 	}
 
 	public getAccesstoken(): Promise<string> {
-		try {
-
-		} catch (error) {
-
-		}
 		return this.readAccessTokenFile();
 	}
 
@@ -42,7 +37,7 @@ export default class AccessToken {
 		try {
 			return await readFileAsync(ACCESS_TOKEN_PATH, 'utf-8');
 		} catch (error) {
-			return '';
+			return undefined;
 		}
 	}
 }
