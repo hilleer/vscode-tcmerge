@@ -39,9 +39,9 @@ In case you have not already saved an access token for GitHub:
 
 * set access token.
 
-It requires access to "repo". If you only expect to use public repositories, you can with "public repo".
+Checkmark "repo" like [shown here](https://github.com/hilleer/vscode-tcmerge/blob/master/resources/github-access-token-setup.PNG).
 
-![github-access-token-setup.PNG](https://github.com/hilleer/vscode-tcmerge/blob/master/resources/github-access-token-setup.PNG)
+If you only expect to use public repositories, you can with "public repo".
 
 In case you have already saved an access token for GitHub:
 
