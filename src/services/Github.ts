@@ -28,6 +28,7 @@ export default class Github {
 		if (json.message === 'Bad credentials') {
 			throw new Error('Github authorization failed. Please make sure your token was given necessary rights');
 		}
+
 		return json;
 	}
 

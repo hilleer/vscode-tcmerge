@@ -21,6 +21,7 @@ export async function main({ github, accessToken }: CreatePullRequest) {
 	}
 
 	const hasAccessToken = await accessToken.hasAccessToken();
+
 	if (!hasAccessToken) {
 		const shouldCreatePullRequest = await setAccessToken(accessToken);
 		if (!shouldCreatePullRequest) {
@@ -30,7 +31,12 @@ export async function main({ github, accessToken }: CreatePullRequest) {
 
 	const githubAccessToken = await accessToken.getAccesstoken();
 	try {
-		const pullRequestTitle: string = await window.showInputBox({ prompt: 'Please type in the title of the pull-request', ignoreFocusOut: true });
+		const pullRequestTitle: string = await window.showInputBox({
+			value: currentBranch,
+			prompt: 'Please type in the title of the pull-request',
+			ignoreFocusOut: true
+		});
+
 		if (!pullRequestTitle) {
 			return;
 		}
@@ -41,7 +47,7 @@ export async function main({ github, accessToken }: CreatePullRequest) {
 			opn(html_url);
 		}
 	} catch (error) {
-		window.showErrorMessage(error);
+		window.showErrorMessage(error.message);
 		return;
 	}
 }
