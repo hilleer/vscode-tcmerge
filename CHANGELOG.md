@@ -1,3 +1,12 @@
+## 0.0.6
+
+* Added GIF's of commands to readme.
+
+## 0.0.5
+
+* Fix error message not being provided when Github communication fails.
+* Add a default value to pull request title to be of current branch.
+
 ## 0.0.4
 
 * Solve bugs with opening urls on certain platforms.
