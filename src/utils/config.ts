@@ -1,41 +1,40 @@
 import { WorkspaceConfiguration, workspace } from 'vscode';
-
-interface ExtensionWorkspaceConfig extends WorkspaceConfiguration {
-	repositoryName?: RepositoryName | null;
-	repositoryOwner?: RepositoryOwner | null;
-}
-
-type RepositoryName = {
-
-};
-
-type RepositoryOwner = {
-
-};
+import { RepositoryDetails } from './git';
 
 enum ConfigOption {
-	name = 'repositoryName',
-	owner = 'repositoryOwner'
+	Origin = 'origin',
+	Owner = 'owner'
 }
 
-export function getWorkspaceConfig(): ExtensionWorkspaceConfig {
+export function getWorkspaceConfiguration(): WorkspaceConfiguration {
 	return workspace.getConfiguration('vscode-tcmerge');
 }
 
-export function isConfigSet(config: ExtensionWorkspaceConfig): boolean {
-	const inspectName = config.inspect(ConfigOption.name);
-	const inspectOwner = config.inspect(ConfigOption.owner);
+export function getRepositoryDetails(): RepositoryDetails {
+	const workspaceConfiguration = getWorkspaceConfiguration();
+	return {
+		origin: workspaceConfiguration.get('origin'),
+		owner: workspaceConfiguration.get('owner')
+	};
+}
+
+export function isWorkspaceConfigSet(config: WorkspaceConfiguration): boolean {
+	const inspectName = config.inspect(ConfigOption.Origin);
+	const inspectOwner = config.inspect(ConfigOption.Owner);
 
 	return Boolean(inspectName.workspaceValue) && Boolean(inspectOwner.workspaceValue);
 }
 
 type Updateconfig = {
-	workspaceConfig: ExtensionWorkspaceConfig;
+	workspaceConfiguration: WorkspaceConfiguration;
 	origin: string;
 	owner: string;
 };
-
-export async function updateConfig({ workspaceConfig, origin, owner }: Updateconfig): Promise<void> {
-	await workspaceConfig.update('repositoryName', origin);
-	await workspaceConfig.update('repositoryOwner', owner);
+export async function updateWorkspaceDetails({ workspaceConfiguration, origin, owner }: Updateconfig): Promise<RepositoryDetails> {
+	await workspaceConfiguration.update('origin', origin);
+	await workspaceConfiguration.update('owner', owner);
+	return {
+		origin,
+		owner
+	};
 }

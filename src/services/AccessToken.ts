@@ -6,9 +6,13 @@ const readFileAsync = promisify(readFile);
 const writeFileAsync = promisify(writeFile);
 const unlinkAsync = promisify(unlink);
 
-const ACCESS_TOKEN_PATH = path.join(__dirname, '..', '..', 'accessToken.txt');
+const ACCESS_TOKEN_FILENAME = 'vscode-tcmerge-access-token.txt';
 
 export default class AccessToken {
+	private accessTokenPath: string;
+	constructor(appRoot: string) {
+		this.accessTokenPath = path.join(appRoot, ACCESS_TOKEN_FILENAME);
+	}
 	public async hasAccessToken(): Promise<boolean> {
 		const accessToken = await this.readAccessTokenFile();
 		if (!accessToken || accessToken.trim() === '') {
@@ -23,19 +27,19 @@ export default class AccessToken {
 
 	public async setAccessToken(accessToken: string): Promise<void> {
 		await writeFileAsync(
-			ACCESS_TOKEN_PATH,
+			this.accessTokenPath,
 			accessToken,
 			'utf-8'
 		);
 	}
 
 	public async removeAccessToken(): Promise<void> {
-		await unlinkAsync(ACCESS_TOKEN_PATH);
+		await unlinkAsync(this.accessTokenPath);
 	}
 
 	private async readAccessTokenFile(): Promise<string> {
 		try {
-			return await readFileAsync(ACCESS_TOKEN_PATH, 'utf-8');
+			return await readFileAsync(this.accessTokenPath, 'utf-8');
 		} catch (error) {
 			return undefined;
 		}

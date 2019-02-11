@@ -1,19 +1,18 @@
 import { window } from 'vscode';
 
 import {
-	getWorkspaceConfig,
-	updateConfig
+	getWorkspaceConfiguration,
+	updateWorkspaceDetails
 } from '../utils/config';
-import { getGitRepositoryInfo } from '../utils/git';
+import { getGitRepoIfno } from '../utils/git';
 
 export async function main() {
-	const workspaceConfig = getWorkspaceConfig();
+	const workspaceConfiguration = getWorkspaceConfiguration();
 	try {
-		const gitInfo = await getGitRepositoryInfo();
+		const gitInfo = await getGitRepoIfno();
 		const { owner, origin } = gitInfo;
-		await updateConfig({ workspaceConfig, owner, origin });
+		await updateWorkspaceDetails({ workspaceConfiguration, owner, origin });
 	} catch (error) {
-		console.error(error);
 		window.showWarningMessage('Something went wrong updating config...');
 		return;
 	}

@@ -1,4 +1,4 @@
-import { window } from 'vscode';
+import { window, env } from 'vscode';
 const opn = require('opn');
 
 import { getCurrentBranch } from '../utils/git';
@@ -11,7 +11,7 @@ type CreatePullRequest = {
 	accessToken: AccessToken;
 };
 
-export async function main({ github, accessToken }: CreatePullRequest) {
+export async function main({ github, accessToken }: CreatePullRequest): Promise<void> {
 
 	const currentBranch = await getCurrentBranch();
 
@@ -33,7 +33,8 @@ export async function main({ github, accessToken }: CreatePullRequest) {
 	try {
 		const pullRequestTitle: string = await window.showInputBox({
 			value: currentBranch,
-			prompt: 'Please type in the title of the pull-request',
+			prompt: 'Please type in the title of the pull request',
+			placeHolder: 'Type in the title of the pull request',
 			ignoreFocusOut: true
 		});
 
@@ -42,13 +43,20 @@ export async function main({ github, accessToken }: CreatePullRequest) {
 		}
 
 		const { html_url } = await github.createPullRequest(pullRequestTitle, currentBranch, githubAccessToken);
-		const selection = await window.showInformationMessage('Successfully created pull request!', 'close', 'Open pull request');
-		if (selection === 'Open pull request') {
+		const selection = await window.showInformationMessage(
+			'Successfully created pull request!',
+			'close',
+			'Open pull request'
+		);
+		if (selection === 'Open pull request' && html_url) {
 			opn(html_url);
 		}
 	} catch (error) {
-		window.showErrorMessage(error.message);
-		return;
+		if (error.message) {
+			showErrorMessage(error.message);
+			return;
+		}
+		showErrorMessage(error);
 	}
 }
 
@@ -72,4 +80,8 @@ async function setAccessToken(accessToken: AccessToken): Promise<boolean> {
 		default:
 			return false;
 	}
+}
+
+async function showErrorMessage(error: any) {
+	return window.showErrorMessage(error);
 }
