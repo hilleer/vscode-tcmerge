@@ -1,5 +1,7 @@
 # vscode-tcmerge
 
+_Note:_ This extension is in its early phase. If you find bugs, have feature requests or good ideas, please create [an issue](https://github.com/hilleer/vscode-tcmerge/issues).
+
 This extension is highly inspired by the CLI package [tcmerge](https://github.com/debitoor/tcmerge).
 
 ## Extension settings
