@@ -1,4 +1,4 @@
-import { window, env } from 'vscode';
+import { window } from 'vscode';
 const opn = require('opn');
 
 import { getCurrentBranch } from '../utils/git';

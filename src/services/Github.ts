@@ -31,7 +31,6 @@ export default class Github {
 			})
 		});
 		const json = await res.json();
-		console.log('json: ', json);
 		
 		if (json.message && json.message === 'Validation Failed') {
 			throw json.errors[0].message;
