@@ -93,5 +93,13 @@
     },
     "bugs": {
         "url": "https://github.com/hilleer/vscode-tcmerge/issues/new"
-    }
+	},
+	"keywords": [
+		"Git",
+		"Github",
+		"Teamcity",
+		"CI/CD",
+		"continous integration",
+		"continous deployment"
+	]
 }
