@@ -2,12 +2,12 @@ import { executeTerminalCommand } from './terminal';
 
 const GIT_COMMAND = 'git';
 
-interface RepositoryInfo {
+export interface RepositoryDetails {
 	owner: string;
 	origin: string;
 }
 
-export async function getGitRepositoryInfo(): Promise<RepositoryInfo> {
+export async function getGitRepoIfno(): Promise<RepositoryDetails> {
 	const extractInfoRegex = /git@github\.com:([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)\.git/;
 
 	const cmdArgs = [

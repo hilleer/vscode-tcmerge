@@ -1,3 +1,9 @@
+## 0.0.7
+
+* Fixes creation of pull request.
+* Better handling of workspace and git settings.
+* Better handling of access token - was removed with every extension update before.
+
 ## 0.0.6
 
 * Added GIF's of commands to readme.

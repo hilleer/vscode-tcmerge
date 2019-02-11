@@ -1,34 +1,21 @@
 'use strict';
 import * as vscode from 'vscode';
 
-import setGithubRepoInfo from './setGithubRepoInfo';
 import Github from './services/Github';
 import AccessToken from './services/AccessToken';
-
-type Activation = {
-	activationPath: string;
-	activationName: string;
-	args?: any
-};
+import setGitInfo from './setGitInfo';
 
 export async function activate(context: vscode.ExtensionContext) {
-	setGithubRepoInfo();
-	const accessToken = new AccessToken();
-	const github = new Github();
+	const gitConfig = await setGitInfo();
 
-	const activations: Activation[] = [
-		{ activationPath: './commands/commitAndPush', activationName: 'commitAndPush', args: {} },
-		{ activationPath: './commands/createReadyBranch', activationName: 'createReadyBranch', args: {} },
-		{ activationPath: './commands/updateGithubConfig', activationName: 'updateGithubConfig', args: {} },
-		{ activationPath: './commands/accessToken', activationName: 'accessToken', args: { accessToken } },
-		{ activationPath: './commands/createPullRequest', activationName: 'createPullRequest', args: { github, accessToken } },
-	];
+	const accessToken = new AccessToken(vscode.env.appRoot);
+	const github = new Github(gitConfig);
 
-	for (const activation of activations) {
-		const { activationPath, activationName, args } = activation;
-		const command = registerCommand(activationPath, activationName, args);
-		context.subscriptions.push(command);
-	}
+	registerCommand('./commands/commitAndPush', 'commitAndPush', {});
+	registerCommand('./commands/createReadyBranch', 'createReadyBranch', {});
+	registerCommand('./commands/updateGithubConfig', 'updateGithubConfig', {});
+	registerCommand('./commands/accessToken', 'accessToken', {});
+	registerCommand('./commands/createPullRequest', 'createPullRequest', { github, accessToken });
 }
 
 function registerCommand(activationPath: string, activationName: string, args: any): vscode.Disposable {
@@ -38,4 +25,5 @@ function registerCommand(activationPath: string, activationName: string, args: a
 
 // this method is called when your extension is deactivated
 export function deactivate() {
+	return vscode.window.showInformationMessage('Successfully deactivated extension');
 }
