@@ -11,7 +11,7 @@ const ACCESS_TOKEN_FILENAME = 'vscode-tcmerge-access-token.txt';
 export default class AccessToken {
 	private accessTokenPath: string;
 	constructor(appRoot: string) {
-		this.accessTokenPath = path.join(appRoot, ACCESS_TOKEN_FILENAME);
+		this.accessTokenPath = path.join(appRoot);
 	}
 	public async hasAccessToken(): Promise<boolean> {
 		const accessToken = await this.readAccessTokenFile();

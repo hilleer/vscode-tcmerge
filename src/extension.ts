@@ -4,11 +4,14 @@ import * as vscode from 'vscode';
 import Github from './services/Github';
 import AccessToken from './services/AccessToken';
 import setGitInfo from './setGitInfo';
+import { Settings } from './services/Settings';
 
 export async function activate() {
 	const gitConfig = await setGitInfo();
 
-	const accessToken = new AccessToken(vscode.env.appRoot);
+	const settings = new Settings();
+	const tokenPath = settings.getTokenPath();
+	const accessToken = new AccessToken(tokenPath);
 	const github = new Github(gitConfig);
 
 	registerCommand('./commands/commitAndPush', 'commitAndPush', {});
