@@ -1,6 +1,6 @@
 import { window } from 'vscode';
 
-import AccessToken from "../services/AccessToken";
+import { AccessToken } from '../services/AccessToken';
 
 export async function main({ accessToken }: { accessToken: AccessToken }): Promise<void> {
 	try {
