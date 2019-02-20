@@ -1,17 +1,20 @@
-import { readFile, writeFile, unlink } from 'fs';
+import { readFile, writeFile, unlink, mkdir } from 'fs';
+import * as os from 'os';
 import { promisify } from 'util';
 import * as path from 'path';
 
 const readFileAsync = promisify(readFile);
 const writeFileAsync = promisify(writeFile);
 const unlinkAsync = promisify(unlink);
+const mkdirAsync = promisify(mkdir);
 
-const ACCESS_TOKEN_FILENAME = 'vscode-tcmerge-access-token.txt';
+const ACCESS_TOKEN_DIR = path.join(os.homedir(), '.vscode-tcmerge');
+const ACCESS_TOKEN_FILENAME = 'access_token.txt';
 
-export default class AccessToken {
+export class AccessToken {
 	private accessTokenPath: string;
-	constructor(appRoot: string) {
-		this.accessTokenPath = path.join(appRoot, ACCESS_TOKEN_FILENAME);
+	constructor() {
+		this.accessTokenPath = path.join(ACCESS_TOKEN_DIR, ACCESS_TOKEN_FILENAME);
 	}
 	public async hasAccessToken(): Promise<boolean> {
 		const accessToken = await this.readAccessTokenFile();
@@ -43,5 +46,17 @@ export default class AccessToken {
 		} catch (error) {
 			return undefined;
 		}
+	}
+}
+
+export async function createAccessTokenDir() {
+	try {
+		await mkdirAsync(ACCESS_TOKEN_DIR);
+	} catch (error) {
+		if (error.message && error.message.startsWith('EEXIST')) {
+			console.info('access token dir already created.');
+			return;
+		}
+		throw error;
 	}
 }

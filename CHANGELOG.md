@@ -1,3 +1,8 @@
+## 0.0.9
+
+* Various feedback message has been updated and improved.
+* Access tokens should now be stored in a better place, so they don't accidentally get removed. E.g. when updating extension or vscode.
+
 ## 0.0.8
 
 * Add keywords for better search results on marketplace.

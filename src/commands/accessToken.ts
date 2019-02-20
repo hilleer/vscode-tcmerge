@@ -1,5 +1,5 @@
 import { window } from 'vscode';
-import AccessToken from '../services/AccessToken';
+import { AccessToken } from '../services/AccessToken';
 const opn = require('opn');
 
 const GITHUB_ACCESS_TOKEN_URL = 'https://github.com/settings/tokens/new';
@@ -25,13 +25,30 @@ async function contributeAccessTokenExists(accessToken: AccessToken) {
 
 	switch (selectedContribution) {
 		case 'Delete access token':
-			await accessToken.removeAccessToken();
+			await contributeDeleteAccessToken();
 			break;
 		case 'Update access token':
 			await contributeUpdateAccessToken();
 			break;
 		default:
 			return;
+	}
+
+	async function contributeDeleteAccessToken(): Promise<void> {
+		const confirmDeletion = await window.showInformationMessage(
+			'Are you sure you want to delete your access token? Can\'t be reverted.',
+			'Cancel',
+			'Confirm'
+		);
+
+		if (confirmDeletion === 'Confirm') {
+			try {
+				await accessToken.removeAccessToken();
+				window.showInformationMessage('Access token successfully deleted!');
+			} catch (error) {
+				throw error;
+			}
+		}
 	}
 
 	async function contributeUpdateAccessToken(): Promise<void> {

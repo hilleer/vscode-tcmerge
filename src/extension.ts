@@ -2,19 +2,20 @@
 import * as vscode from 'vscode';
 
 import Github from './services/Github';
-import AccessToken from './services/AccessToken';
+import { AccessToken, createAccessTokenDir } from './services/AccessToken';
 import setGitInfo from './setGitInfo';
 
 export async function activate() {
 	const gitConfig = await setGitInfo();
 
-	const accessToken = new AccessToken(vscode.env.appRoot);
+	await createAccessTokenDir();
+	const accessToken = new AccessToken();
 	const github = new Github(gitConfig);
 
 	registerCommand('./commands/commitAndPush', 'commitAndPush', {});
 	registerCommand('./commands/createReadyBranch', 'createReadyBranch', {});
 	registerCommand('./commands/updateGithubConfig', 'updateGithubConfig', {});
-	registerCommand('./commands/accessToken', 'accessToken', {});
+	registerCommand('./commands/accessToken', 'accessToken', { accessToken });
 	registerCommand('./commands/createPullRequest', 'createPullRequest', { github, accessToken });
 }
 

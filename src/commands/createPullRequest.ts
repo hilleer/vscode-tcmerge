@@ -3,7 +3,7 @@ const opn = require('opn');
 
 import { getCurrentBranch } from '../utils/git';
 import Github, { } from '../services/Github';
-import AccessToken from '../services/AccessToken';
+import { AccessToken } from '../services/AccessToken';
 import { getAccesstokenFromInput } from './accessToken';
 
 type CreatePullRequest = {
