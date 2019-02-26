@@ -1,27 +1,20 @@
-// export const GITHUB_BASE_API_URL = 'https://api.github.com';
-// export const GITHUB_TOKEN = 'e0d9f866eca8cfdcd66391f4a967f46ebe7451f2';
 import fetch from 'node-fetch';
+import { Git } from './Git';
 
 const GITHUB_BASE_API_URL = 'https://api.github.com';
 
-type GithubArgs = {
-	owner: string;
-	origin: string;
-};
-
 export default class Github {
 	private baseApiUrl: string;
-	private origin: string;
-	private owner: string;
+	private git: Git;
 
-	constructor({ origin, owner }: GithubArgs) {
+	constructor(git: Git) {
 		this.baseApiUrl = GITHUB_BASE_API_URL;
-		this.origin = origin;
-		this.owner = owner;
+		this.git = git;
 	}
 
 	public async createPullRequest(title: string, head: string, accessToken: string) {
-		const url = `${this.baseApiUrl}/repos/${this.owner}/${this.origin}/pulls?access_token=${accessToken}`;
+		const { origin, owner } = await this.git.getGitDetails();
+		const url = `${this.baseApiUrl}/repos/${owner}/${origin}/pulls?access_token=${accessToken}`;
 		const res = await fetch(url, {
 			method: 'POST',
 			body: JSON.stringify({
@@ -31,7 +24,7 @@ export default class Github {
 			})
 		});
 		const json = await res.json();
-		
+
 		if (json.message && json.message === 'Validation Failed') {
 			throw json.errors[0].message;
 		}

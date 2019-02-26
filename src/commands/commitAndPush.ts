@@ -1,14 +1,18 @@
 import { window } from 'vscode';
 
 import { executeTerminalCommand } from '../utils/terminal';
-import { getCurrentBranch, shouldSetUpstreamBranch } from '../utils/git';
+import { Git } from '../services/Git';
+
+type CommitAndPush = {
+	git: Git;
+};
 
 const GIT_COMMAND = 'git';
 
-export async function main() {
+export async function main({ git }: CommitAndPush) {
 	let selectedBranch: string;
 
-	const currentBranch = await getCurrentBranch();
+	const currentBranch = await git.getCurrentBranch();
 
 	let inputCommitInfo = await window.showInputBox({
 		ignoreFocusOut: true,
@@ -29,7 +33,8 @@ export async function main() {
 		}
 		await stageChanges();
 		await commitChanges(inputCommitInfo);
-		await pushChanges(selectedBranch);
+		const shouldSetUpstreamBranch = await git.shouldSetUpstreamBranch();
+		await pushChanges(selectedBranch, shouldSetUpstreamBranch);
 		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
 	} catch (error) {
 		window.showWarningMessage(error);
@@ -55,13 +60,12 @@ async function commitChanges(commitMessage: string) {
 	await executeTerminalCommand(GIT_COMMAND, args);
 }
 
-async function pushChanges(branch: string) {
+async function pushChanges(branch: string, shouldSetUpstreamBranch: boolean) {
 	const args = [
 		'push'
 	];
-	const upstreamIsSet: boolean = await shouldSetUpstreamBranch();
 
-	if (!upstreamIsSet) {
+	if (!shouldSetUpstreamBranch) {
 		args.push('--set-upstream');
 		args.push('origin');
 		args.push(branch);

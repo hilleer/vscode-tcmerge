@@ -1,13 +1,14 @@
 import { window } from 'vscode';
 
-import { getCurrentBranch } from '../utils/git';
 import { executeTerminalCommand } from '../utils/terminal';
+import { Git } from '../services/Git';
 
 type CreateReadyBranch = {
+	git: Git;
 };
 
-export async function main({ }: CreateReadyBranch): Promise<void> {
-	const currentBranch = await getCurrentBranch();
+export async function main({ git }: CreateReadyBranch): Promise<void> {
+	const currentBranch = await git.getCurrentBranch();
 
 	if (/^master$/.test(currentBranch)) {
 		window.showInformationMessage('You are currently checked-in branch is master. You can\'t create a ready branch of master');

@@ -3,20 +3,19 @@ import * as vscode from 'vscode';
 
 import Github from './services/Github';
 import { AccessToken, createAccessTokenDir } from './services/AccessToken';
-import setGitInfo from './setGitInfo';
+import { Git } from './services/Git';
 
 export async function activate() {
-	const gitConfig = await setGitInfo();
+	const git = new Git();
 
 	await createAccessTokenDir();
 	const accessToken = new AccessToken();
-	const github = new Github(gitConfig);
+	const github = new Github(git);
 
-	registerCommand('./commands/commitAndPush', 'commitAndPush', {});
-	registerCommand('./commands/createReadyBranch', 'createReadyBranch', {});
-	registerCommand('./commands/updateGithubConfig', 'updateGithubConfig', {});
+	registerCommand('./commands/commitAndPush', 'commitAndPush', { git });
+	registerCommand('./commands/createReadyBranch', 'createReadyBranch', { git });
 	registerCommand('./commands/accessToken', 'accessToken', { accessToken });
-	registerCommand('./commands/createPullRequest', 'createPullRequest', { github, accessToken });
+	registerCommand('./commands/createPullRequest', 'createPullRequest', { github, accessToken, git });
 }
 
 function registerCommand(activationPath: string, activationName: string, args: any): vscode.Disposable {
