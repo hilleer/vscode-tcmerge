@@ -1,3 +1,8 @@
+## 0.1.0
+
+* Rather big update to the way using git info. Instead of storing it in and retrieving it from workspace config, it is now retrieved with git command when needed.
+* 
+
 ## 0.0.9
 
 * Various feedback message has been updated and improved.
