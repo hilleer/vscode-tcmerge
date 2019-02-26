@@ -8,13 +8,6 @@ This extension is highly inspired by the CLI package [tcmerge](https://github.co
 
 This extension contributes the following settings:
 
-* `vscode-tcmerge.origin` - name of the repository.
-* `vscode-tcmerge.owner` - owner of the repository.
-
-They are automatically set loading the extension for the first time, but can be updated manually or automatically using the command [tcmerge: Update git info](https://github.com/hilleer/vscode-tcmerge#user-content-tcmerge-update-git-info).
-
-These settings a required for certain commands to work.
-
 ## Commands
 
 ### tcmerge: commit and push
