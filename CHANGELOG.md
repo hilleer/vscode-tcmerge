@@ -1,7 +1,7 @@
 ## 0.1.0
 
-* Code optimisations.
-* Updated some text on user selection buttons.
+* Internal code optimisations.
+* Some user information- and button texts updated.
 
 ## 0.0.9
 
