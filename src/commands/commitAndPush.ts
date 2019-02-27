@@ -1,14 +1,18 @@
 import { window } from 'vscode';
 
 import { executeTerminalCommand } from '../utils/terminal';
-import { getCurrentBranch, shouldSetUpstreamBranch } from '../utils/git';
+import { Git } from '../services/Git';
+
+type CommitAndPush = {
+	git: Git;
+};
 
 const GIT_COMMAND = 'git';
 
-export async function main() {
+export async function main({ git }: CommitAndPush) {
 	let selectedBranch: string;
 
-	const currentBranch = await getCurrentBranch();
+	const currentBranch = await git.getCurrentBranch();
 
 	let inputCommitInfo = await window.showInputBox({
 		ignoreFocusOut: true,
@@ -23,14 +27,19 @@ export async function main() {
 
 	selectedBranch = await setSelectedBranch(currentBranch, inputCommitInfo);
 
+	if (!selectedBranch) {
+		return;
+	}
+
 	try {
 		if (currentBranch !== selectedBranch) {
 			await checkoutToBranch(selectedBranch);
 		}
 		await stageChanges();
 		await commitChanges(inputCommitInfo);
-		await pushChanges(selectedBranch);
-		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
+		const shouldSetUpstreamBranch = await git.shouldSetUpstreamBranch();
+		await pushChanges(selectedBranch, shouldSetUpstreamBranch);
+		window.showInformationMessage(`Successfully pushed to branch ${selectedBranch}`);
 	} catch (error) {
 		window.showWarningMessage(error);
 		return;
@@ -55,13 +64,12 @@ async function commitChanges(commitMessage: string) {
 	await executeTerminalCommand(GIT_COMMAND, args);
 }
 
-async function pushChanges(branch: string) {
+async function pushChanges(branch: string, shouldSetUpstreamBranch: boolean) {
 	const args = [
 		'push'
 	];
-	const upstreamIsSet: boolean = await shouldSetUpstreamBranch();
 
-	if (!upstreamIsSet) {
+	if (!shouldSetUpstreamBranch) {
 		args.push('--set-upstream');
 		args.push('origin');
 		args.push(branch);
@@ -82,9 +90,9 @@ async function setSelectedBranch(currentBranch: string, commitMessage: string) {
 	const branchName = commitMessage.replace(/\s/g, '-');
 	if (/^master/.test(currentBranch)) {
 		const selection = await window.showInformationMessage(
-			`Current branch is master. Do you want to push to ${branchName} instead?`, 'yes', 'no'
+			`Current branch is master. Do you want to push to ${branchName} instead?`, 'push to shown branch', 'push to master'
 		);
-		return selection === 'yes'
+		return selection === 'push to shown branch'
 			? branchName
 			: 'master';
 	}

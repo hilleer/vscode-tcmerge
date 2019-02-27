@@ -1,3 +1,8 @@
+## 0.1.0
+
+* Internal code optimisations.
+* Some user information- and button texts updated.
+
 ## 0.0.9
 
 * Various feedback message has been updated and improved.

@@ -2,7 +2,7 @@
     "name": "vscode-tcmerge",
     "displayName": "vscode-tcmerge",
     "description": "easily integrate git and github with vscode",
-    "version": "0.0.9",
+    "version": "0.1.0",
     "engines": {
         "vscode": "^1.28.0"
     },
@@ -13,7 +13,6 @@
         "onCommand:extension.commitAndPush",
         "onCommand:extension.createPullRequest",
         "onCommand:extension.createReadyBranch",
-        "onCommand:extension.updateGithubConfig",
         "onCommand:extension.accessToken",
         "workspaceContains:.git"
     ],
@@ -25,22 +24,6 @@
                 "title": "vscode-tcmerge configuration",
                 "description": "configuration for vscode-tcmerge extension",
                 "properties": {
-                    "vscode-tcmerge.origin": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
-                        "default": null,
-                        "description": "Origin of the remote git repository"
-                    },
-                    "vscode-tcmerge.owner": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
-                        "default": null,
-                        "description": "Owner of the remote git repository"
-                    }
                 }
             }
         ],
@@ -52,10 +35,6 @@
             {
                 "command": "extension.createPullRequest",
                 "title": "tcmerge: Create pull request"
-            },
-            {
-                "command": "extension.updateGithubConfig",
-                "title": "tcmerge: Update git info"
             },
             {
                 "command": "extension.createReadyBranch",

@@ -1,19 +1,20 @@
 import { window } from 'vscode';
 const opn = require('opn');
 
-import { getCurrentBranch } from '../utils/git';
 import Github, { } from '../services/Github';
 import { AccessToken } from '../services/AccessToken';
 import { getAccesstokenFromInput } from './accessToken';
+import { Git } from '../services/Git';
 
 type CreatePullRequest = {
 	github: Github;
 	accessToken: AccessToken;
+	git: Git;
 };
 
-export async function main({ github, accessToken }: CreatePullRequest): Promise<void> {
+export async function main({ github, accessToken, git }: CreatePullRequest): Promise<void> {
 
-	const currentBranch = await getCurrentBranch();
+	const currentBranch = await git.getCurrentBranch();
 
 	if (currentBranch === 'master') {
 		window.showInformationMessage(`Current branch is master, please go to the right branch and try again`);

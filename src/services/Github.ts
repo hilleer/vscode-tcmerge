@@ -1,20 +1,13 @@
-// export const GITHUB_BASE_API_URL = 'https://api.github.com';
-// export const GITHUB_TOKEN = 'e0d9f866eca8cfdcd66391f4a967f46ebe7451f2';
 import fetch from 'node-fetch';
 
 const GITHUB_BASE_API_URL = 'https://api.github.com';
 
-type GithubArgs = {
-	owner: string;
-	origin: string;
-};
-
 export default class Github {
 	private baseApiUrl: string;
-	private origin: string;
 	private owner: string;
+	private origin: string;
 
-	constructor({ origin, owner }: GithubArgs) {
+	constructor({ owner, origin }: { owner: string, origin: string }) {
 		this.baseApiUrl = GITHUB_BASE_API_URL;
 		this.origin = origin;
 		this.owner = owner;
@@ -31,7 +24,7 @@ export default class Github {
 			})
 		});
 		const json = await res.json();
-		
+
 		if (json.message && json.message === 'Validation Failed') {
 			throw json.errors[0].message;
 		}
