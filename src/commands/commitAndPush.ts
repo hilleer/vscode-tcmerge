@@ -27,6 +27,10 @@ export async function main({ git }: CommitAndPush) {
 
 	selectedBranch = await setSelectedBranch(currentBranch, inputCommitInfo);
 
+	if (!selectedBranch) {
+		return;
+	}
+
 	try {
 		if (currentBranch !== selectedBranch) {
 			await checkoutToBranch(selectedBranch);
@@ -35,7 +39,7 @@ export async function main({ git }: CommitAndPush) {
 		await commitChanges(inputCommitInfo);
 		const shouldSetUpstreamBranch = await git.shouldSetUpstreamBranch();
 		await pushChanges(selectedBranch, shouldSetUpstreamBranch);
-		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
+		window.showInformationMessage(`Successfully pushed to branch ${selectedBranch}`);
 	} catch (error) {
 		window.showWarningMessage(error);
 		return;
@@ -86,9 +90,9 @@ async function setSelectedBranch(currentBranch: string, commitMessage: string) {
 	const branchName = commitMessage.replace(/\s/g, '-');
 	if (/^master/.test(currentBranch)) {
 		const selection = await window.showInformationMessage(
-			`Current branch is master. Do you want to push to ${branchName} instead?`, 'yes', 'no'
+			`Current branch is master. Do you want to push to ${branchName} instead?`, 'push to shown branch', 'push to master'
 		);
-		return selection === 'yes'
+		return selection === 'push to shown branch'
 			? branchName
 			: 'master';
 	}

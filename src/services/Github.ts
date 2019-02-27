@@ -1,20 +1,20 @@
 import fetch from 'node-fetch';
-import { Git } from './Git';
 
 const GITHUB_BASE_API_URL = 'https://api.github.com';
 
 export default class Github {
 	private baseApiUrl: string;
-	private git: Git;
+	private owner: string;
+	private origin: string;
 
-	constructor(git: Git) {
+	constructor({ owner, origin }: { owner: string, origin: string }) {
 		this.baseApiUrl = GITHUB_BASE_API_URL;
-		this.git = git;
+		this.origin = origin;
+		this.owner = owner;
 	}
 
 	public async createPullRequest(title: string, head: string, accessToken: string) {
-		const { origin, owner } = await this.git.getGitDetails();
-		const url = `${this.baseApiUrl}/repos/${owner}/${origin}/pulls?access_token=${accessToken}`;
+		const url = `${this.baseApiUrl}/repos/${this.owner}/${this.origin}/pulls?access_token=${accessToken}`;
 		const res = await fetch(url, {
 			method: 'POST',
 			body: JSON.stringify({

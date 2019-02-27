@@ -7,10 +7,11 @@ import { Git } from './services/Git';
 
 export async function activate() {
 	const git = new Git();
+	const gitDetails = await git.getGitDetails();
 
 	await createAccessTokenDir();
 	const accessToken = new AccessToken();
-	const github = new Github(git);
+	const github = new Github(gitDetails);
 
 	registerCommand('./commands/commitAndPush', 'commitAndPush', { git });
 	registerCommand('./commands/createReadyBranch', 'createReadyBranch', { git });

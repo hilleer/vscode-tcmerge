@@ -1,4 +1,4 @@
-import { workspace, WorkspaceConfiguration, window } from 'vscode';
+import { workspace, WorkspaceConfiguration } from 'vscode';
 
 enum ConfigKey {
 	Tmp = ''
