@@ -24,7 +24,7 @@ Will create a pull request of the branch, using input as description for the pul
 
 Creates a ready branch of your branch that your build server is listening for.
 
-That is, it will a push a branch `ready/<current-branch-name>/<timestamp>`.
+That is, it will a push a branch `ready/<current-branch-name>/<timestamp>` to origin.
 
 ![create-ready-branch.gif](https://raw.githubusercontent.com/hilleer/vscode-tcmerge/master/resources/create-ready-branch.gif)
 
