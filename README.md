@@ -38,13 +38,17 @@ That is, it will a push a branch `ready/<current-branch-name>/<timestamp>` to or
 
 ### tcmerge: Github access token
 
-Contributes multiple selections.
+Contributes multiple selections based on its current state, defined by if you have saved an access token.
 
-In case you have not already saved an access token for GitHub:
+An access token is necessary for the command [tcmerge: Create pull request](#user-content-tcmerge-create-ready-branch) to work.
 
-* set access token.
+In case you have not already saved an access token for GitHub, selecting this command will let you by showing:
 
-It requires access to "repo". If you only expect to use public repositories, you can with "public repo".
+* `set access token`.
+
+You need to create an access token to your Github account on [Github](https://github.com/settings/tokens/new).
+
+It requires access to scope `repo` if you expect to create pull requests in private repositories, otherwise you can just select `public_repo`.
 
 ![create-access-token.gif](https://raw.githubusercontent.com/hilleer/vscode-tcmerge/master/resources/create-access-token.gif)
 
