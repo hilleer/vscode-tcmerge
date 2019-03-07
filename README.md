@@ -6,15 +6,10 @@ This extension is highly inspired by the CLI package [debitoor/tcmerge](https://
 
 ### Table of contents
 
-#### Commands
-
 * [tcmerge: commit and push](#user-content-tcmerge-commit-and-push)
-* [Create pull request](#user-content-tcmerge-create-pull-request)
+* [tcmerge: Create pull request](#user-content-tcmerge-create-pull-request)
 * [tcmerge: Create ready branch](#user-content-tcmerge-create-ready-branch)
 * [tcmerge: Github access token](#user-content-tcmerge-github-access-token)
-
-#### Other
-
 * [Design](#user-content-design)
 
 ## Commands
