@@ -4,6 +4,19 @@ _Note:_ This extension is in its early phase. If you find bugs, have feature req
 
 This extension is highly inspired by the CLI package [debitoor/tcmerge](https://github.com/debitoor/tcmerge).
 
+### Table of contents
+
+#### Commands
+
+* [tcmerge: commit and push](#user-content-tcmerge-commit-and-push)
+* [Create pull request](#user-content-tcmerge-create-pull-request)
+* [tcmerge: Create ready branch](#user-content-tcmerge-create-ready-branch)
+* [tcmerge: Github access token](#user-content-tcmerge-github-access-token)
+
+#### Other
+
+* [Design](#user-content-design)
+
 ## Commands
 
 ### tcmerge: commit and push
@@ -47,8 +60,8 @@ In case you have already saved an access token for GitHub:
 * `Delete access token` - will remove the access token from storage. This command cannot be reverted.
 * `Update access token` - will update the access token accordingly to a given input. This command cannot be reverted.
 
-### tcmerge: Update git info
+## Design
 
-Updates the repository info saved in the extension config (`.vscode/settings.json`).
+Extension logo is designed and created by [Mads Uldbæk](https://www.linkedin.com/in/madsuldbaek/).
 
-This information is initially set automatically when loading the extension and is required for multiple commands to work.
+Please do not re-use, modify or change it in anyway without having his permission first.

@@ -80,5 +80,6 @@
 		"CI/CD",
 		"continous integration",
 		"continous deployment"
-	]
+	],
+	"icon": "https://raw.githubusercontent.com/hilleer/vscode-tcmerge/master/resources/extension-logo.png"
 }
