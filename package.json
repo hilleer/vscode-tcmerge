@@ -81,5 +81,5 @@
 		"continous integration",
 		"continous deployment"
 	],
-	"icon": "resources/extension-logo.png"
+	"icon": "images/extension-logo.png"
 }
