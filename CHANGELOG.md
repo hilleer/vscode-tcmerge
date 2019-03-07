@@ -1,3 +1,8 @@
+## 0.1.1
+
+* Small changes.
+* Add extension icon.
+
 ## 0.1.0
 
 * Internal code optimisations.
