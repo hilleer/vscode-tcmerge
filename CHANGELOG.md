@@ -1,3 +1,7 @@
+## 0.1.2
+
+* Update extension logo.
+
 ## 0.1.1
 
 * Small changes.
