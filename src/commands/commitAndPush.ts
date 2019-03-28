@@ -31,18 +31,46 @@ export async function main({ git }: CommitAndPush) {
 		return;
 	}
 
+	let shouldSetUpstreamBranch: boolean;
 	try {
 		if (currentBranch !== selectedBranch) {
 			await checkoutToBranch(selectedBranch);
 		}
 		await stageChanges();
 		await commitChanges(inputCommitInfo);
-		const shouldSetUpstreamBranch = await git.shouldSetUpstreamBranch();
+		shouldSetUpstreamBranch = await git.shouldSetUpstreamBranch();
 		await pushChanges(selectedBranch, shouldSetUpstreamBranch);
-		window.showInformationMessage(`Successfully pushed to branch ${selectedBranch}`);
+		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
 	} catch (error) {
-		window.showWarningMessage(error);
-		return;
+		const isBranchOutOfDate = error.message && error.message.includes('git pull ...');
+		console.log('error!!!!', error);
+		if (isBranchOutOfDate) {
+			const shouldPullChanges = await window.showWarningMessage(
+				'Failed to push, because your current branch is behind origin. Pull changes now?',
+				'Pull',
+				'Close'
+			);
+			if (shouldPullChanges === 'Pull') {
+				try {
+					await pullFromCurrentBranch(selectedBranch);
+					const shouldPushAgain = await window.showInformationMessage(
+						`Successfully pulled changes from ${selectedBranch}. Try to push again?`,
+						'Push',
+						'Close'
+					);
+
+					if (shouldPushAgain === 'Push') {
+						await pushChanges(selectedBranch, shouldSetUpstreamBranch);
+						window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
+					}
+				} catch (error) {
+					console.log('error', error);
+					return window.showErrorMessage('Failed to pull changes. Please submit a bug report');
+				}
+			}
+			return undefined;
+		}
+		return window.showWarningMessage(error);
 	}
 }
 
@@ -60,6 +88,12 @@ async function commitChanges(commitMessage: string) {
 		'-m',
 		commitMessage
 	];
+
+	await executeTerminalCommand(GIT_COMMAND, args);
+}
+
+async function pullFromCurrentBranch(branch: string) {
+	const args = ['pull', 'origin', branch];
 
 	await executeTerminalCommand(GIT_COMMAND, args);
 }

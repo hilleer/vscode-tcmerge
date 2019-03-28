@@ -1,20 +1,19 @@
 import { workspace } from 'vscode';
 import { execFile } from 'child_process';
+import { promisify } from 'util';
 
-export function executeTerminalCommand(cmd: string, cmdArgs?: any[], opts?: any): Promise<any> {
+const execFileAsync = promisify(execFile);
+
+type TerminalCommand = {
+	stdout: Buffer;
+	stderr: Buffer;
+};
+
+export async function executeTerminalCommand(cmd: string, cmdArgs?: any[], opts?: any): Promise<TerminalCommand> {
 	const defaults = {
 		cwd: workspace.rootPath
 	};
 	opts = { ...defaults, ...opts };
-	return new Promise((resolve, reject) => {
-		execFile(cmd, cmdArgs, opts, (err, stdout, stderr) => {
-			if (err) {
-				reject(err);
-			}
-			if (stderr) {
-				console.log(stderr);
-			}
-			resolve(stdout);
-		});
-	});
+
+	return execFileAsync(cmd, cmdArgs, opts);
 }

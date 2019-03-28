@@ -12,8 +12,8 @@ export class Git {
 		const extractInfoRegex = /git@github\.com:([A-Za-z0-9_.-]*)\/([A-Za-z0-9_.-]*)\.git/;
 		const cmdArgs = ['remote', '-v'];
 
-		const dirtyRemoteInfo = await executeTerminalCommand(GIT_COMMAND, cmdArgs);
-		const cleanRemoteInfo = extractInfoRegex.exec(dirtyRemoteInfo);
+		const { stdout: dirtyRemoteInfo } = await executeTerminalCommand(GIT_COMMAND, cmdArgs);
+		const cleanRemoteInfo = extractInfoRegex.exec(dirtyRemoteInfo.toString());
 
 		return {
 			owner: cleanRemoteInfo[1],
@@ -27,8 +27,8 @@ export class Git {
 			'--short',
 			'HEAD'
 		];
-		const branch: string = await executeTerminalCommand(GIT_COMMAND, args);
-		return branch && branch.trim();
+		const { stdout: branch } = await executeTerminalCommand(GIT_COMMAND, args);
+		return branch && branch.toString().trim();
 	}
 
 	public async shouldSetUpstreamBranch(): Promise<boolean> {
@@ -36,8 +36,8 @@ export class Git {
 			'status',
 			'-sb'
 		];
-		const status = await executeTerminalCommand(GIT_COMMAND, args);
+		const { stdout: status } = await executeTerminalCommand(GIT_COMMAND, args);
 		const regex = /## [\w-_]*\.{3}origin\/[\w-_]*/;
-		return regex.test(status);
+		return regex.test(status.toString());
 	}
 }
