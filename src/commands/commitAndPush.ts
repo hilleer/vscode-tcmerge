@@ -7,8 +7,6 @@ type CommitAndPush = {
 	git: Git;
 };
 
-const GIT_COMMAND = 'git';
-
 export async function main({ git }: CommitAndPush): Promise<void> {
 	let selectedBranch: string;
 
@@ -45,11 +43,11 @@ export async function main({ git }: CommitAndPush): Promise<void> {
 
 		await git.stage();
 		await git.commit(inputCommitInfo);
-		await git.pushChanges(selectedBranch);
+		await git.push(selectedBranch);
 		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
 	} catch (error) {
 		console.log(error);
-		window.showErrorMessage('Something went wrong... If problem persists, please create a bug report');
+		window.showErrorMessage(error.message);
 	}
 }
 
@@ -78,7 +76,7 @@ async function handleBranchStatus(branchStatus: string, branch: string, git: Git
 			if (pull === 'cancel') {
 				return true;
 			}
-			await git.pullChanges(branch);
+			await git.pull(branch);
 			break;
 		case Status.PushNeeded:
 			const push = await window.showWarningMessage(
@@ -89,7 +87,7 @@ async function handleBranchStatus(branchStatus: string, branch: string, git: Git
 			if (push === 'cancel') {
 				return true;
 			}
-			await git.pushChanges(branch);
+			await git.push(branch);
 			break;
 		case Status.Diverged:
 			const pushAndPull = await window.showWarningMessage(
@@ -100,8 +98,8 @@ async function handleBranchStatus(branchStatus: string, branch: string, git: Git
 			if (pushAndPull === 'cancel') {
 				return true;
 			}
-			await git.pullChanges(branch);
-			await git.pushChanges(branch);
+			await git.pull(branch);
+			await git.push(branch);
 			break;
 	}
 	return false;

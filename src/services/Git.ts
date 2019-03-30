@@ -38,7 +38,7 @@ export class Git {
 		return branch && branch.toString().trim();
 	}
 
-	public async pushChanges(branch: string) {
+	public async push(branch: string) {
 		const args = ['push'];
 
 		const shouldSetUpstreamBranch = await this.shouldSetUpstreamBranch();
@@ -54,7 +54,7 @@ export class Git {
 		await executeTerminalCommand(GIT_COMMAND, args);
 	}
 
-	public async pullChanges(branch?: string) {
+	public async pull(branch?: string) {
 		const args = ['pull'];
 
 		if (branch) {
@@ -63,7 +63,7 @@ export class Git {
 		}
 
 		await executeTerminalCommand(GIT_COMMAND, args);
-
+r
 	}
 
 	public async checkout(branch: string) {
