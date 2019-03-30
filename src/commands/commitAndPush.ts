@@ -1,7 +1,7 @@
 import { window } from 'vscode';
 
 import { executeTerminalCommand } from '../utils/terminal';
-import { Git } from '../services/Git';
+import { Git, Status } from '../services/Git';
 
 type CommitAndPush = {
 	git: Git;
@@ -9,7 +9,7 @@ type CommitAndPush = {
 
 const GIT_COMMAND = 'git';
 
-export async function main({ git }: CommitAndPush) {
+export async function main({ git }: CommitAndPush): Promise<void> {
 	let selectedBranch: string;
 
 	const currentBranch = await git.getCurrentBranch();
@@ -20,7 +20,7 @@ export async function main({ git }: CommitAndPush) {
 	});
 
 	if (!inputCommitInfo) {
-		return;
+		return undefined;
 	}
 
 	inputCommitInfo = inputCommitInfo.trim();
@@ -28,96 +28,29 @@ export async function main({ git }: CommitAndPush) {
 	selectedBranch = await setSelectedBranch(currentBranch, inputCommitInfo);
 
 	if (!selectedBranch) {
-		return;
+		return undefined;
 	}
 
-	let shouldSetUpstreamBranch: boolean;
 	try {
 		if (currentBranch !== selectedBranch) {
-			await checkoutToBranch(selectedBranch);
+			await git.checkout(selectedBranch);
 		}
-		await stageChanges();
-		await commitChanges(inputCommitInfo);
-		shouldSetUpstreamBranch = await git.shouldSetUpstreamBranch();
-		await pushChanges(selectedBranch, shouldSetUpstreamBranch);
+
+		const branchStatus = await git.status(selectedBranch);
+
+		const shouldCancel = await handleBranchStatus(branchStatus, selectedBranch, git);
+		if (shouldCancel) {
+			return;
+		}
+
+		await git.stage();
+		await git.commit(inputCommitInfo);
+		await git.pushChanges(selectedBranch);
 		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
 	} catch (error) {
-		const isBranchOutOfDate = error.message && error.message.includes('git pull ...');
-		console.log('error!!!!', error);
-		if (isBranchOutOfDate) {
-			const shouldPullChanges = await window.showWarningMessage(
-				'Failed to push, because your current branch is behind origin. Pull changes now?',
-				'Pull',
-				'Close'
-			);
-			if (shouldPullChanges === 'Pull') {
-				try {
-					await pullFromCurrentBranch(selectedBranch);
-					const shouldPushAgain = await window.showInformationMessage(
-						`Successfully pulled changes from ${selectedBranch}. Try to push again?`,
-						'Push',
-						'Close'
-					);
-
-					if (shouldPushAgain === 'Push') {
-						await pushChanges(selectedBranch, shouldSetUpstreamBranch);
-						window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
-					}
-				} catch (error) {
-					console.log('error', error);
-					return window.showErrorMessage('Failed to pull changes. Please submit a bug report');
-				}
-			}
-			return undefined;
-		}
-		return window.showWarningMessage(error);
+		console.log(error);
+		window.showErrorMessage('Something went wrong... If problem persists, please create a bug report');
 	}
-}
-
-async function stageChanges() {
-	const args = [
-		'add',
-		'-A'
-	];
-	await executeTerminalCommand(GIT_COMMAND, args);
-}
-
-async function commitChanges(commitMessage: string) {
-	const args = [
-		'commit',
-		'-m',
-		commitMessage
-	];
-
-	await executeTerminalCommand(GIT_COMMAND, args);
-}
-
-async function pullFromCurrentBranch(branch: string) {
-	const args = ['pull', 'origin', branch];
-
-	await executeTerminalCommand(GIT_COMMAND, args);
-}
-
-async function pushChanges(branch: string, shouldSetUpstreamBranch: boolean) {
-	const args = [
-		'push'
-	];
-
-	if (!shouldSetUpstreamBranch) {
-		args.push('--set-upstream');
-		args.push('origin');
-		args.push(branch);
-	}
-	await executeTerminalCommand(GIT_COMMAND, args);
-}
-
-async function checkoutToBranch(branch: string): Promise<void> {
-	const args = [
-		'checkout',
-		'-b',
-		branch
-	];
-	await executeTerminalCommand(GIT_COMMAND, args);
 }
 
 async function setSelectedBranch(currentBranch: string, commitMessage: string) {
@@ -131,4 +64,45 @@ async function setSelectedBranch(currentBranch: string, commitMessage: string) {
 			: 'master';
 	}
 	return currentBranch;
+}
+
+async function handleBranchStatus(branchStatus: string, branch: string, git: Git) {
+	switch (branchStatus) {
+		case Status.UpToDate: return false;
+		case Status.PullNeeded:
+			const pull = await window.showWarningMessage(
+				'Origin is ahead of your branch (need to pull)',
+				'Pull now',
+				'cancel'
+			);
+			if (pull === 'cancel') {
+				return true;
+			}
+			await git.pullChanges(branch);
+			break;
+		case Status.PushNeeded:
+			const push = await window.showWarningMessage(
+				'Origin is behind your local branch (need to push)',
+				'Push now',
+				'cancel'
+			);
+			if (push === 'cancel') {
+				return true;
+			}
+			await git.pushChanges(branch);
+			break;
+		case Status.Diverged:
+			const pushAndPull = await window.showWarningMessage(
+				'Origin and local branch has diverged (need to push and pull)',
+				'Push and pull now',
+				'cancel'
+			);
+			if (pushAndPull === 'cancel') {
+				return true;
+			}
+			await git.pullChanges(branch);
+			await git.pushChanges(branch);
+			break;
+	}
+	return false;
 }
