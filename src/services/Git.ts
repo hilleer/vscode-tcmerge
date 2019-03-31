@@ -93,7 +93,7 @@ export class Git {
 		await await this.execFile({ args });
 	}
 
-	public async status(branch: string) {
+	public async getBranchStatus(branch: string) {
 		const shouldSetUpstreamBranch = await this.shouldSetUpstreamBranch();
 		if (!shouldSetUpstreamBranch) {
 			await this.push(branch, true);

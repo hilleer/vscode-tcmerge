@@ -33,7 +33,7 @@ export async function main({ git }: CommitAndPushArgs): Promise<void> {
 			await git.checkout(selectedBranch);
 		}
 
-		const branchStatus = await git.status(selectedBranch);
+		const branchStatus = await git.getBranchStatus(selectedBranch);
 
 		const shouldCancel = await handleBranchStatus(branchStatus, selectedBranch, git);
 		if (shouldCancel) {
