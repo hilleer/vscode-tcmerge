@@ -1,5 +1,4 @@
 'use strict';
-// import * as vscode from 'vscode';
 import { window, commands, Disposable, workspace } from 'vscode';
 
 import Github from './services/Github';
