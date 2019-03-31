@@ -1,13 +1,14 @@
 import { window } from 'vscode';
 
-import { executeTerminalCommand } from '../utils/terminal';
 import { Git } from '../services/Git';
+import { ChildProcess } from '../utils/childProcess';
 
 type CreateReadyBranch = {
 	git: Git;
+	childProcess: ChildProcess;
 };
 
-export async function main({ git }: CreateReadyBranch): Promise<void> {
+export async function main({ git, childProcess }: CreateReadyBranch): Promise<void> {
 	const currentBranch = await git.getCurrentBranch();
 
 	if (/^master$/.test(currentBranch)) {
@@ -25,7 +26,7 @@ export async function main({ git }: CreateReadyBranch): Promise<void> {
 	const readyBranch = `ready/${currentBranch}/${timestamp}`;
 
 	try {
-		await executeTerminalCommand(
+		await childProcess.execFile(
 			'git',
 			[
 				'push',

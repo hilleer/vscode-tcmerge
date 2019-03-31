@@ -1,13 +1,12 @@
 import { window } from 'vscode';
 
-import { executeTerminalCommand } from '../utils/terminal';
 import { Git, Status } from '../services/Git';
 
-type CommitAndPush = {
+type CommitAndPushArgs = {
 	git: Git;
 };
 
-export async function main({ git }: CommitAndPush): Promise<void> {
+export async function main({ git }: CommitAndPushArgs): Promise<void> {
 	let selectedBranch: string;
 
 	const currentBranch = await git.getCurrentBranch();
@@ -47,7 +46,8 @@ export async function main({ git }: CommitAndPush): Promise<void> {
 		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
 	} catch (error) {
 		console.log(error);
-		window.showErrorMessage(error.message);
+		const message = error.message || 'An unexpected error occured';
+		window.showErrorMessage(message);
 	}
 }
 
