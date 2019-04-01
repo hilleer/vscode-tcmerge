@@ -6,13 +6,13 @@ import { AccessToken } from '../services/AccessToken';
 import { getAccesstokenFromInput } from './accessToken';
 import { Git } from '../services/Git';
 
-type CreatePullRequest = {
+type CreatePullRequestArgs = {
 	github: Github;
 	accessToken: AccessToken;
 	git: Git;
 };
 
-export async function main({ github, accessToken, git }: CreatePullRequest): Promise<void> {
+export async function main({ github, accessToken, git }: CreatePullRequestArgs): Promise<void> {
 
 	const currentBranch = await git.getCurrentBranch();
 

@@ -16,7 +16,7 @@ export async function activate() {
 	const github = new Github(gitDetails);
 
 	registerCommand('./commands/commitAndPush', 'commitAndPush', { git });
-	registerCommand('./commands/createReadyBranch', 'createReadyBranch', { git, childProcess });
+	registerCommand('./commands/createReadyBranch', 'createReadyBranch', { git });
 	registerCommand('./commands/accessToken', 'accessToken', { accessToken });
 	registerCommand('./commands/createPullRequest', 'createPullRequest', { github, accessToken, git });
 }

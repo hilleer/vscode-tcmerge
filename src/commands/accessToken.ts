@@ -4,7 +4,9 @@ const opn = require('opn');
 
 const GITHUB_ACCESS_TOKEN_URL = 'https://github.com/settings/tokens/new';
 
-export async function main({ accessToken }: { accessToken: AccessToken }) {
+type AccessTokenArgs = { accessToken: AccessToken; };
+
+export async function main({ accessToken }: AccessTokenArgs) {
 
 	const hasAccesstoken = await accessToken.hasAccessToken();
 
@@ -41,13 +43,15 @@ async function contributeAccessTokenExists(accessToken: AccessToken) {
 			'Confirm'
 		);
 
-		if (confirmDeletion === 'Confirm') {
-			try {
-				await accessToken.removeAccessToken();
-				window.showInformationMessage('Access token successfully deleted!');
-			} catch (error) {
-				throw error;
-			}
+		if (confirmDeletion !== 'Confirm') {
+			return;
+		}
+
+		try {
+			await accessToken.removeAccessToken();
+			window.showInformationMessage('Access token successfully deleted!');
+		} catch (error) {
+			throw error;
 		}
 	}
 
@@ -60,7 +64,7 @@ async function contributeAccessTokenExists(accessToken: AccessToken) {
 
 		const confirmSelection = await window.showInformationMessage('Are you sure you want to overwrite your access token?', 'No', 'Yes');
 
-		if (confirmSelection === 'No') {
+		if (confirmSelection !== 'Yes') {
 			return;
 		}
 
@@ -89,7 +93,12 @@ async function contributeSetAccessToken(accessToken: AccessToken): Promise<void>
 }
 
 export async function getAccesstokenFromInput(): Promise<string> {
-	const openGithubSettings = await window.showInformationMessage('Create and copy-paste your personal access token on Github', 'Close', 'Open Github', 'Insert');
+	const openGithubSettings = await window.showInformationMessage(
+		'Create and copy-paste your personal access token on Github',
+		'Close',
+		'Open Github',
+		'Insert'
+	);
 
 	if (openGithubSettings && openGithubSettings.toLowerCase() === 'close') {
 		return undefined;
