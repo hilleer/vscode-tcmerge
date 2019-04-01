@@ -63,4 +63,4 @@ In case you have already saved an access token for GitHub:
 
 Extension logo is designed and created by [Mads Uldbæk](https://www.linkedin.com/in/madsuldbaek/).
 
-Please do not re-use, modify or change it in anyway without contacting and having his approval first.
+Please do not re-use, modify or change it in anyway without contacting him and having his approval first.
