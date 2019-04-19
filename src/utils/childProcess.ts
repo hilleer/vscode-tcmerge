@@ -11,7 +11,7 @@ export type ExecFilePromise = Promise<{
 }>;
 
 export class ChildProcess {
-	private cwd: string;
+	protected cwd: string;
 	constructor(cwd: string) {
 		this.cwd = cwd;
 	}

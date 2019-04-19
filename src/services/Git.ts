@@ -20,6 +20,10 @@ type ExecFileArgs = {
 
 type ExecFileWrapper = ({ cmd, args, options }: ExecFileArgs) => ExecFilePromise;
 
+enum PushArg {
+	SetUpstream = '--set-upstream'
+}
+
 export class Git {
 	private execFile: ExecFileWrapper;
 	constructor(childProcess: ChildProcess) {
@@ -48,12 +52,15 @@ export class Git {
 		return branch && branch.toString().trim();
 	}
 
-	public async push(branch: string, forceUpstream?: boolean) {
+	public async push(branch: string, pushArgs?: PushArg[]) {
 		const args = ['push'];
 
-		const shouldSetUpstreamBranch = forceUpstream || await this.shouldSetUpstreamBranch();
-		if (shouldSetUpstreamBranch) {
+		if (!pushArgs.includes(PushArg.SetUpstream) && await this.shouldSetUpstreamBranch()) {
 			args.push('--set-upstream');
+		}
+
+		if (pushArgs) {
+			args.push(...pushArgs);
 		}
 
 		if (branch) {
@@ -96,7 +103,7 @@ export class Git {
 	public async getBranchStatus(branch: string) {
 		const shouldSetUpstreamBranch = await this.shouldSetUpstreamBranch();
 		if (!shouldSetUpstreamBranch) {
-			await this.push(branch, true);
+			await this.push(branch, [PushArg.SetUpstream]);
 		}
 		const remoteUpdateArgs = ['remote', 'update'];
 		const remoteArgs = ['rev-parse', `origin/${branch}`];

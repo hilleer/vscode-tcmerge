@@ -2,7 +2,7 @@
     "name": "vscode-tcmerge",
     "displayName": "vscode-tcmerge",
     "description": "easily integrate git and github with vscode",
-    "version": "0.1.3",
+    "version": "1.0.0",
     "engines": {
         "vscode": "^1.28.0"
     },
@@ -23,8 +23,7 @@
             {
                 "title": "vscode-tcmerge configuration",
                 "description": "configuration for vscode-tcmerge extension",
-                "properties": {
-                }
+                "properties": {}
             }
         ],
         "commands": [
@@ -58,11 +57,11 @@
         "vscode": "1.1.21",
         "tslint": "5.8.0",
         "@types/node": "8.10.25",
-        "@types/mocha": "2.2.42"
+        "@types/mocha": "2.2.42",
+        "@types/node-fetch": "2.1.2",
+        "@types/opn": "5.1.0"
     },
     "dependencies": {
-        "@types/node-fetch": "2.1.2",
-        "@types/opn": "5.1.0",
         "node-fetch": "2.2.1",
         "opn": "5.4.0"
     },
@@ -72,14 +71,14 @@
     },
     "bugs": {
         "url": "https://github.com/hilleer/vscode-tcmerge/issues/new"
-	},
-	"keywords": [
-		"Git",
-		"Github",
-		"Teamcity",
-		"CI/CD",
-		"continous integration",
-		"continous deployment"
-	],
-	"icon": "logo/logo-1x.png"
+    },
+    "keywords": [
+        "Git",
+        "Github",
+        "Teamcity",
+        "CI/CD",
+        "continous integration",
+        "continous deployment"
+    ],
+    "icon": "logo/logo-1x.png"
 }

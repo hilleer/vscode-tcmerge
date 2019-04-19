@@ -35,7 +35,7 @@ export async function main({ git }: CommitAndPushArgs): Promise<void> {
 
 		const branchStatus = await git.getBranchStatus(selectedBranch);
 
-		const shouldCancel = await handleBranchStatus(branchStatus, selectedBranch, git);
+		const shouldCancel = await updateBranchStatus(branchStatus, selectedBranch, git);
 		if (shouldCancel) {
 			return;
 		}
@@ -64,7 +64,7 @@ async function setSelectedBranch(currentBranch: string, commitMessage: string) {
 	return currentBranch;
 }
 
-async function handleBranchStatus(branchStatus: string, branch: string, git: Git) {
+async function updateBranchStatus(branchStatus: string, branch: string, git: Git) {
 	switch (branchStatus) {
 		case Status.UpToDate: return false;
 		case Status.PullNeeded:
