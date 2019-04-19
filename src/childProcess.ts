@@ -16,7 +16,7 @@ export class ChildProcess {
 		this.cwd = cwd;
 	}
 
-	public async execFile(cmd: string, args?: string[], options?: any) {
+	public async execFile(cmd: string, args?: string[], options?: any): ExecFilePromise {
 		options = { cwd: this.cwd, ...options };
 
 		return execFileAsync(cmd, args, options);
