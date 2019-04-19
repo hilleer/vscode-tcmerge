@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import sinon, { SinonStub } from 'sinon';
+import path from 'path';
 
 import { Git } from '../git';
 import { ChildProcess } from '../childProcess';
@@ -17,7 +18,7 @@ suite('git', () => {
 				stderr: (stderr && new Buffer(stderr)) || ''
 			});
 		});
-		const childProcess = new ChildProcess('fake');
+		const childProcess = new ChildProcess(path.join('fake', 'cwd', 'path'));
 		git = new Git(childProcess);
 	});
 	suiteTeardown(() => {
