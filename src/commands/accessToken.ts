@@ -17,19 +17,24 @@ export async function main({ accessToken }: AccessTokenArgs) {
 	}
 }
 
+enum AccessTokenContribution {
+	DeleteAccessToken = 'Delete access token',
+	UpdateAccessToken = 'Update access token'
+}
+
 async function contributeAccessTokenExists(accessToken: AccessToken) {
 	const contributions: string[] = [
-		'Delete access token',
-		'Update access token'
+		AccessTokenContribution.DeleteAccessToken,
+		AccessTokenContribution.UpdateAccessToken
 	];
 
 	const selectedContribution = await window.showQuickPick(contributions);
 
 	switch (selectedContribution) {
-		case 'Delete access token':
+		case AccessTokenContribution.DeleteAccessToken:
 			await contributeDeleteAccessToken();
 			break;
-		case 'Update access token':
+		case AccessTokenContribution.UpdateAccessToken:
 			await contributeUpdateAccessToken();
 			break;
 		default:
