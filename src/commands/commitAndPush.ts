@@ -1,6 +1,6 @@
 import { window } from 'vscode';
 
-import { Git, Status } from '../services/Git';
+import { Git, Status } from '../Git';
 
 type CommitAndPushArgs = {
 	git: Git;

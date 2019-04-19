@@ -1,10 +1,10 @@
 'use strict';
 import { window, commands, Disposable, workspace } from 'vscode';
 
-import Github from './services/Github';
-import { AccessToken, createAccessTokenDir } from './services/AccessToken';
-import { Git } from './services/Git';
-import { ChildProcess } from './utils/childProcess';
+import Github from './github';
+import { AccessToken, createAccessTokenDir } from './accessToken';
+import { Git } from './Git';
+import { ChildProcess } from './childProcess';
 
 export async function activate() {
 	const childProcess = new ChildProcess(workspace.rootPath);

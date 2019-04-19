@@ -1,6 +1,6 @@
 import { window } from 'vscode';
 
-import { Git } from '../services/Git';
+import { Git } from '../Git';
 
 type CreateReadyBranchArgs = {
 	git: Git;
@@ -16,7 +16,7 @@ export async function main({ git }: CreateReadyBranchArgs): Promise<void> {
 
 	const selection = await window.showInformationMessage(`Create ready branch of branch ${currentBranch}?`, 'Create ready branch', 'cancel');
 
-	if (selection !== 'yes') {
+	if (!selection || selection !== 'Create ready branch') {
 		return;
 	}
 

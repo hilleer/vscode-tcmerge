@@ -3,17 +3,11 @@
 		"module": "commonjs",
 		"target": "es6",
 		"outDir": "out",
+		"rootDir": "src",
 		"lib": [
 			"es2017",
 			"dom"
 		],
-		"paths": {
-			"*": [
-				"node_modules/*",
-				"src/types/*"
-			]
-		},
-		"baseUrl": ".",
 		"sourceMap": true,
 		"noImplicitAny": true,
 		"noUnusedLocals": true, 
@@ -23,9 +17,6 @@
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true
 	},
-	"include": [
-		"src/**/*"
-	],
 	"exclude": [
 		"node_modules",
 		".vscode-test"

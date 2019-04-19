@@ -1,5 +1,5 @@
 import { window } from 'vscode';
-import { AccessToken } from '../services/AccessToken';
+import { AccessToken } from '../accessToken';
 const opn = require('opn');
 
 const GITHUB_ACCESS_TOKEN_URL = 'https://github.com/settings/tokens/new';

@@ -1,4 +1,4 @@
-import { ExecFilePromise, ChildProcess } from '../utils/childProcess';
+import { ExecFilePromise, ChildProcess } from './childProcess';
 
 type GitDetails = {
 	owner: string;
@@ -55,7 +55,8 @@ export class Git {
 	public async push(branch: string, pushArgs?: PushArg[]) {
 		const args = ['push'];
 
-		if (!pushArgs.includes(PushArg.SetUpstream) && await this.shouldSetUpstreamBranch()) {
+		const pushArgsShouldSetUpstream = pushArgs && !pushArgs.includes(PushArg.SetUpstream);
+		if (pushArgsShouldSetUpstream && await this.shouldSetUpstreamBranch()) {
 			args.push('--set-upstream');
 		}
 

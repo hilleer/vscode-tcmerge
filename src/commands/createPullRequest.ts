@@ -1,10 +1,10 @@
 import { window } from 'vscode';
 const opn = require('opn');
 
-import Github, { } from '../services/Github';
-import { AccessToken } from '../services/AccessToken';
+import Github, { } from '../github';
+import { AccessToken } from '../accessToken';
 import { getAccesstokenFromInput } from './accessToken';
-import { Git } from '../services/Git';
+import { Git } from '../Git';
 
 type CreatePullRequestArgs = {
 	github: Github;
