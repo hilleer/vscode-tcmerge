@@ -4,7 +4,8 @@ enum ConfigKey {
 	Tmp = ''
 }
 
-export class Configs {
+// Currently unused
+export class Config {
 	private workspaceConfig: WorkspaceConfiguration;
 	constructor() {
 		this.workspaceConfig = workspace.getConfiguration('vscode-tcmerge');

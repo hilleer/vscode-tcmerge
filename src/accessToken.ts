@@ -18,7 +18,7 @@ export class AccessToken {
 	}
 	public async hasAccessToken(): Promise<boolean> {
 		const accessToken = await this.readAccessTokenFile();
-		if (!accessToken || accessToken.trim() === '') {
+		if (!accessToken) {
 			return false;
 		}
 		return true;
@@ -44,7 +44,7 @@ export class AccessToken {
 		try {
 			return await readFileAsync(this.accessTokenPath, 'utf-8');
 		} catch (error) {
-			return undefined;
+			return '';
 		}
 	}
 }

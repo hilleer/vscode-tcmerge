@@ -1,18 +1,18 @@
 import { window } from 'vscode';
 const opn = require('opn');
 
-import Github, { } from '../services/Github';
-import { AccessToken } from '../services/AccessToken';
+import Github, { } from '../github';
+import { AccessToken } from '../accessToken';
 import { getAccesstokenFromInput } from './accessToken';
-import { Git } from '../services/Git';
+import { Git } from '../Git';
 
-type CreatePullRequest = {
+type CreatePullRequestArgs = {
 	github: Github;
 	accessToken: AccessToken;
 	git: Git;
 };
 
-export async function main({ github, accessToken, git }: CreatePullRequest): Promise<void> {
+export async function main({ github, accessToken, git }: CreatePullRequestArgs): Promise<void> {
 
 	const currentBranch = await git.getCurrentBranch();
 

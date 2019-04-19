@@ -1,3 +1,8 @@
+## 0.1.3
+
+* `Commit and push` now handles when local branch is not pushable to origin, due to conflicts (needs pull, push or has diverged).
+* Small changes and fixes overall.
+
 ## 0.1.2
 
 * Update extension logo.

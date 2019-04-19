@@ -1,13 +1,12 @@
 import { window } from 'vscode';
 
-import { executeTerminalCommand } from '../utils/terminal';
-import { Git } from '../services/Git';
+import { Git } from '../Git';
 
-type CreateReadyBranch = {
+type CreateReadyBranchArgs = {
 	git: Git;
 };
 
-export async function main({ git }: CreateReadyBranch): Promise<void> {
+export async function main({ git }: CreateReadyBranchArgs): Promise<void> {
 	const currentBranch = await git.getCurrentBranch();
 
 	if (/^master$/.test(currentBranch)) {
@@ -15,24 +14,17 @@ export async function main({ git }: CreateReadyBranch): Promise<void> {
 		return;
 	}
 
-	const selection = await window.showInformationMessage(`Create ready branch of branch ${currentBranch}?`, 'yes', 'cancel');
+	const selection = await window.showInformationMessage(`Create ready branch of branch ${currentBranch}?`, 'Create ready branch', 'cancel');
 
-	if (selection !== 'yes') {
+	if (!selection || selection !== 'Create ready branch') {
 		return;
 	}
 
 	const timestamp = Date.now();
-	const readyBranch = `ready/${currentBranch}/${timestamp}`;
+	const readyBranch = `${currentBranch}:ready/${currentBranch}/${timestamp}`;
 
 	try {
-		await executeTerminalCommand(
-			'git',
-			[
-				'push',
-				'origin',
-				`${currentBranch}:${readyBranch}`
-			]
-		);
+		await git.push(readyBranch);
 		window.showInformationMessage(`Successfully created ready branch of ${currentBranch}`);
 	} catch (error) {
 		window.showErrorMessage(error);
