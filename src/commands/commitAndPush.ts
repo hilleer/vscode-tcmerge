@@ -17,7 +17,7 @@ export async function main({ git }: CommitAndPushArgs): Promise<void> {
 	});
 
 	if (!inputCommitInfo) {
-		return undefined;
+		return;
 	}
 
 	inputCommitInfo = inputCommitInfo.trim();
@@ -25,7 +25,7 @@ export async function main({ git }: CommitAndPushArgs): Promise<void> {
 	selectedBranch = await setSelectedBranch(currentBranch, inputCommitInfo);
 
 	if (!selectedBranch) {
-		return undefined;
+		return;
 	}
 
 	try {

@@ -106,7 +106,7 @@ export async function getAccesstokenFromInput(): Promise<string> {
 	);
 
 	if (openGithubSettings && openGithubSettings.toLowerCase() === 'close') {
-		return undefined;
+		return '';
 	}
 
 	if (openGithubSettings && openGithubSettings.toLowerCase() === 'open github') {
@@ -126,7 +126,7 @@ export async function getAccesstokenFromInput(): Promise<string> {
 
 	if (/^\s*$/.test(inputAccessToken)) {
 		window.showWarningMessage('Empty access token was provided');
-		return undefined;
+		return '';
 	}
 	return inputAccessToken;
 }
