@@ -53,7 +53,8 @@ export async function main({ git }: CommitAndPushArgs): Promise<void> {
 
 async function setSelectedBranch(currentBranch: string, commitMessage: string) {
 	const branchName = commitMessage.replace(/\s/g, '-');
-	if (/^master/.test(currentBranch)) {
+
+	if (currentBranch.startsWith('master')) {
 		const selection = await window.showInformationMessage(
 			`Current branch is master. Do you want to push to ${branchName} instead?`, 'push to shown branch', 'push to master'
 		);

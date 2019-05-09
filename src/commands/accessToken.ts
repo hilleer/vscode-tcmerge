@@ -1,6 +1,5 @@
-import { window } from 'vscode';
+import { window, env, Uri } from 'vscode';
 import { AccessToken } from '../accessToken';
-const opn = require('opn');
 
 const GITHUB_ACCESS_TOKEN_URL = 'https://github.com/settings/tokens/new';
 
@@ -110,7 +109,7 @@ export async function getAccesstokenFromInput(): Promise<string> {
 	}
 
 	if (openGithubSettings && openGithubSettings.toLowerCase() === 'open github') {
-		opn(GITHUB_ACCESS_TOKEN_URL);
+		env.openExternal(Uri.parse(GITHUB_ACCESS_TOKEN_URL));
 	}
 
 	const inputAccessToken = await window.showInputBox({
@@ -124,7 +123,7 @@ export async function getAccesstokenFromInput(): Promise<string> {
 		return '';
 	}
 
-	if (/^\s*$/.test(inputAccessToken)) {
+	if (inputAccessToken.trim() === '') {
 		window.showWarningMessage('Empty access token was provided');
 		return '';
 	}
