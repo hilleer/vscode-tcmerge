@@ -9,9 +9,12 @@ import { ChildProcess } from './childProcess';
 export async function activate() {
 	const childProcess = new ChildProcess(workspace.rootPath);
 	const git = new Git(childProcess);
-	const gitDetails = await git.getGitDetails();
 
-	await createAccessTokenDir();
+	const [gitDetails] = await Promise.all([
+		git.getGitDetails(),
+		createAccessTokenDir()
+	]);
+
 	const accessToken = new AccessToken();
 	const github = new Github(gitDetails);
 
