@@ -63,7 +63,7 @@
         "vscode": "1.1.34"
     },
     "dependencies": {
-        "node-fetch": "2.2.1"
+        "node-fetch": "2.6.0"
     },
     "repository": {
         "url": "https://github.com/hilleer/vscode-tcmerge",
