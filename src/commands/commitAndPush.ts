@@ -28,16 +28,20 @@ export async function main({ git }: CommitAndPushArgs): Promise<void> {
 		return;
 	}
 
+	let isNewBranch = false;
 	try {
 		if (currentBranch !== selectedBranch) {
+			isNewBranch = true;
 			await git.checkout(selectedBranch);
 		}
 
-		const branchStatus = await git.getBranchStatus(selectedBranch);
+		if (!isNewBranch) { // check if branch is up-to-date
+			const branchStatus = await git.getBranchStatus(selectedBranch);
 
-		const shouldCancel = await updateBranchStatus(branchStatus, selectedBranch, git);
-		if (shouldCancel) {
-			return;
+			const shouldPullFirst = await checkBranchStatus(branchStatus);
+			if (shouldPullFirst) {
+				await git.pull(selectedBranch);
+			}
 		}
 
 		await git.stage();
@@ -45,7 +49,6 @@ export async function main({ git }: CommitAndPushArgs): Promise<void> {
 		await git.push(selectedBranch);
 		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
 	} catch (error) {
-		console.log(error);
 		const message = error.message || 'An unexpected error occured';
 		window.showErrorMessage(message);
 	}
@@ -65,43 +68,30 @@ async function setSelectedBranch(currentBranch: string, commitMessage: string) {
 	return currentBranch;
 }
 
-async function updateBranchStatus(branchStatus: string, branch: string, git: Git) {
+async function checkBranchStatus(branchStatus: string) {
+	const pullNow = 'Pull now';
 	switch (branchStatus) {
-		case Status.UpToDate: return false;
 		case Status.PullNeeded:
-			const pull = await window.showWarningMessage(
+			const shouldPull = await window.showWarningMessage(
 				'Origin is ahead of your branch (need to pull)',
-				'Pull now',
+				pullNow,
 				'cancel'
 			);
-			if (pull === 'cancel') {
+			if (shouldPull === pullNow) {
 				return true;
 			}
-			await git.pull(branch);
-			break;
-		case Status.PushNeeded:
-			const push = await window.showWarningMessage(
-				'Origin is behind your local branch (need to push)',
-				'Push now',
-				'cancel'
-			);
-			if (push === 'cancel') {
-				return true;
-			}
-			await git.push(branch);
-			break;
 		case Status.Diverged:
-			const pushAndPull = await window.showWarningMessage(
-				'Origin and local branch has diverged (need to push and pull)',
-				'Push and pull now',
+			const shouldPushAndPull = await window.showWarningMessage(
+				'Origin and local branch has diverged (need to pull)',
+				pullNow,
 				'cancel'
 			);
-			if (pushAndPull === 'cancel') {
+			if (shouldPushAndPull === pullNow) {
 				return true;
 			}
-			await git.pull(branch);
-			await git.push(branch);
-			break;
+		case Status.UpToDate:
+		case Status.PushNeeded:
+		default:
+			return false;
 	}
-	return false;
 }

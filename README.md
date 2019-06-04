@@ -4,14 +4,6 @@ _Note:_ This extension is in its early phase. If you find bugs, have feature req
 
 This extension is highly inspired by the CLI package [debitoor/tcmerge](https://github.com/debitoor/tcmerge).
 
-### Table of contents
-
-* [tcmerge: commit and push](#user-content-tcmerge-commit-and-push)
-* [tcmerge: Create pull request](#user-content-tcmerge-create-pull-request)
-* [tcmerge: Create ready branch](#user-content-tcmerge-create-ready-branch)
-* [tcmerge: Github access token](#user-content-tcmerge-github-access-token)
-* [Design](#user-content-design)
-
 ## Commands
 
 ### tcmerge: commit and push

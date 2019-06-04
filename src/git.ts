@@ -102,19 +102,21 @@ export class Git {
 	}
 
 	public async getBranchStatus(branch: string) {
-		const shouldSetUpstreamBranch = await this.shouldSetUpstreamBranch();
-		if (!shouldSetUpstreamBranch) {
-			await this.push(branch, [PushArg.SetUpstream]);
-		}
 		const remoteUpdateArgs = ['remote', 'update'];
 		const remoteArgs = ['rev-parse', `origin/${branch}`];
 		const localArgs = ['rev-parse', '@'];
 		const baseArgs = ['merge-base', '@', `origin/${branch}`];
 
 		await this.execFile({ args: remoteUpdateArgs });
-		const { stdout: localStatus } = await this.execFile({ args: localArgs });
-		const { stdout: remoteStatus } = await this.execFile({ args: remoteArgs });
-		const { stdout: baseStatus } = await this.execFile({ args: baseArgs });
+		const [
+			{ stdout: localStatus },
+			{ stdout: remoteStatus },
+			{ stdout: baseStatus }
+		] = await Promise.all([
+			this.execFile({ args: localArgs }).catch(() => ({ stdout: '' })),
+			this.execFile({ args: remoteArgs }).catch(() => ({ stdout: '' })),
+			this.execFile({ args: baseArgs }).catch(() => ({ stdout: '' }))
+		]);
 
 		if (remoteStatus === localStatus) {
 			return Status.UpToDate;
@@ -132,8 +134,8 @@ export class Git {
 			'status',
 			'-sb'
 		];
-		const { stdout: status } = await this.execFile({ args });
+		const { stdout } = await this.execFile({ args });
 		const regex = /## [\w-_]*\.{3}origin\/[\w-_]*/;
-		return regex.test(status.toString());
+		return regex.test(String(stdout));
 	}
 }
