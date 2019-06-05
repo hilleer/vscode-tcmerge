@@ -1,6 +1,6 @@
 import { window } from 'vscode';
 
-import { Git, Status } from '../Git';
+import { Git, Status, PushArg } from '../Git';
 
 type CommitAndPushArgs = {
 	git: Git;
@@ -35,18 +35,24 @@ export async function main({ git }: CommitAndPushArgs): Promise<void> {
 			await git.checkout(selectedBranch);
 		}
 
-		if (!isNewBranch) { // check if branch is up-to-date
+		if (!isNewBranch) {
 			const branchStatus = await git.getBranchStatus(selectedBranch);
 
-			const shouldPullFirst = await checkBranchStatus(branchStatus);
-			if (shouldPullFirst) {
+			const shouldPull = await checkShouldPull(branchStatus);
+			if (shouldPull) {
 				await git.pull(selectedBranch);
 			}
 		}
 
-		await git.stage();
-		await git.commit(inputCommitInfo);
-		await git.push(selectedBranch);
+		const { stdout: gitStatus } = await git.status();
+		const shouldStageAndCommit = !String(gitStatus).includes('nothing to commit');
+
+		if (shouldStageAndCommit) {
+			await git.stage();
+			await git.commit(inputCommitInfo);
+		}
+
+		await git.push(selectedBranch, [PushArg.SetUpstream]);
 		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
 	} catch (error) {
 		const message = error.message || 'An unexpected error occured';
@@ -68,30 +74,34 @@ async function setSelectedBranch(currentBranch: string, commitMessage: string) {
 	return currentBranch;
 }
 
-async function checkBranchStatus(branchStatus: string) {
-	const pullNow = 'Pull now';
+async function checkShouldPull(branchStatus: string) {
+	const pullNowOption = 'Pull now';
+	let pullMessage: string;
+
 	switch (branchStatus) {
 		case Status.PullNeeded:
-			const shouldPull = await window.showWarningMessage(
-				'Origin is ahead of your branch (need to pull)',
-				pullNow,
-				'cancel'
-			);
-			if (shouldPull === pullNow) {
-				return true;
-			}
+			pullMessage = 'Origin is ahead of your branch (need to pull)';
+			break;
 		case Status.Diverged:
-			const shouldPushAndPull = await window.showWarningMessage(
-				'Origin and local branch has diverged (need to pull)',
-				pullNow,
-				'cancel'
-			);
-			if (shouldPushAndPull === pullNow) {
-				return true;
-			}
+			pullMessage = 'Origin and local branch has diverged (need to pull)';
+			break;
 		case Status.UpToDate:
 		case Status.PushNeeded:
 		default:
-			return false;
+			break; // no-need to pull in those cases
 	}
+
+	if (pullMessage) {
+		const shouldPullAnswer = await window.showWarningMessage(
+			pullMessage,
+			pullNowOption,
+			'Cancel'
+		);
+
+		if (shouldPullAnswer === pullNowOption) {
+			return true;
+		}
+	}
+
+	return false;
 }

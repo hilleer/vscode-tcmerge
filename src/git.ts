@@ -20,7 +20,7 @@ type ExecFileArgs = {
 
 type ExecFileWrapper = ({ cmd, args, options }: ExecFileArgs) => ExecFilePromise;
 
-enum PushArg {
+export enum PushArg {
 	SetUpstream = '--set-upstream'
 }
 
@@ -69,7 +69,7 @@ export class Git {
 			args.push(branch);
 		}
 
-		await await this.execFile({ args });
+		await this.execFile({ args });
 	}
 
 	public async pull(branch?: string) {
@@ -80,25 +80,25 @@ export class Git {
 			args.push(branch);
 		}
 
-		await await this.execFile({ args });
+		await this.execFile({ args });
 	}
 
 	public async checkout(branch: string) {
 		const args = ['checkout', '-b', branch];
 
-		await await this.execFile({ args });
+		await this.execFile({ args });
 	}
 
 	public async commit(message: string) {
 		const args = ['commit', '-m', message];
 
-		await await this.execFile({ args });
+		await this.execFile({ args });
 	}
 
 	public async stage() {
 		const args = ['add', '-A'];
 
-		await await this.execFile({ args });
+		await this.execFile({ args });
 	}
 
 	public async getBranchStatus(branch: string) {
@@ -127,6 +127,12 @@ export class Git {
 		} else {
 			return Status.Diverged;
 		}
+	}
+
+	public async status() {
+		const args = ['status'];
+
+		return this.execFile({ args });
 	}
 
 	private async shouldSetUpstreamBranch(): Promise<boolean> {
