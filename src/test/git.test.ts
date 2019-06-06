@@ -12,6 +12,7 @@ suite('git', () => {
 	let callStub: (stdout: string, stderr?: string) => void;
 	suiteSetup(() => {
 		stub = sinon.stub(ChildProcess.prototype, 'execFile');
+		// @ts-ignore
 		callStub = (stdout: string, stderr: string) => stub.callsFake(async (cmd: string, args?: string[], options?: any) => {
 			return Promise.resolve({
 				stdout: new Buffer(stdout),
