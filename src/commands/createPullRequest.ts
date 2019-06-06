@@ -1,5 +1,4 @@
-import { window } from 'vscode';
-const opn = require('opn');
+import { window, env, Uri } from 'vscode';
 
 import Github, { } from '../github';
 import { AccessToken } from '../accessToken';
@@ -50,7 +49,7 @@ export async function main({ github, accessToken, git }: CreatePullRequestArgs):
 			'Open pull request'
 		);
 		if (selection === 'Open pull request' && html_url) {
-			opn(html_url);
+			env.openExternal(Uri.parse(html_url));
 		}
 	} catch (error) {
 		if (error.message) {

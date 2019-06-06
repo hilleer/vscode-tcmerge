@@ -9,7 +9,7 @@ type CreateReadyBranchArgs = {
 export async function main({ git }: CreateReadyBranchArgs): Promise<void> {
 	const currentBranch = await git.getCurrentBranch();
 
-	if (/^master$/.test(currentBranch)) {
+	if (currentBranch.startsWith('master')) {
 		window.showInformationMessage('You are currently on master branch. It is not possible to create a ready-branch while on master');
 		return;
 	}

@@ -3,18 +3,18 @@ import fetch from 'node-fetch';
 const GITHUB_BASE_API_URL = 'https://api.github.com';
 
 export default class Github {
-	private baseApiUrl: string;
+	private baseUrl: string;
 	private owner: string;
 	private origin: string;
 
 	constructor({ owner, origin }: { owner: string, origin: string }) {
-		this.baseApiUrl = GITHUB_BASE_API_URL;
+		this.baseUrl = GITHUB_BASE_API_URL;
 		this.origin = origin;
 		this.owner = owner;
 	}
 
 	public async createPullRequest(title: string, head: string, accessToken: string) {
-		const url = `${this.baseApiUrl}/repos/${this.owner}/${this.origin}/pulls?access_token=${accessToken}`;
+		const url = `${this.baseUrl}/repos/${this.owner}/${this.origin}/pulls?access_token=${accessToken}`;
 		const res = await fetch(url, {
 			method: 'POST',
 			body: JSON.stringify({
@@ -40,7 +40,7 @@ export default class Github {
 	}
 
 	public async listPullRequests(accessToken: string) {
-		const res = await fetch(`${this.baseApiUrl}/repos/hilleer/vscode-nocms-test/pulls?access_token=${accessToken}`);
+		const res = await fetch(`${this.baseUrl}/repos/hilleer/vscode-nocms-test/pulls?access_token=${accessToken}`);
 		return res.json();
 	}
 }
