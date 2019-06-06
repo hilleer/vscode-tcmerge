@@ -7,67 +7,69 @@ type CommitAndPushArgs = {
 };
 
 export async function main({ git }: CommitAndPushArgs): Promise<void> {
-	let selectedBranch: string;
+	const { stdout: gitStatus } = await git.status();
+	const shouldStageAndCommit = !String(gitStatus).includes('nothing to commit');
+
+	let inputCommitInfo: string;
+	if (shouldStageAndCommit) {
+		inputCommitInfo = await window.showInputBox({
+			ignoreFocusOut: true,
+			placeHolder: 'Branch- and commit info'
+		});
+
+		if (!inputCommitInfo) {
+			return;
+		}
+		inputCommitInfo = inputCommitInfo.trim();
+	}
 
 	const currentBranch = await git.getCurrentBranch();
 
-	let inputCommitInfo = await window.showInputBox({
-		ignoreFocusOut: true,
-		placeHolder: 'Branch- and commit info'
-	});
+	const checkoutBranch = await getCheckoutBranch(currentBranch, inputCommitInfo);
 
-	if (!inputCommitInfo) {
-		return;
-	}
-
-	inputCommitInfo = inputCommitInfo.trim();
-
-	selectedBranch = await setSelectedBranch(currentBranch, inputCommitInfo);
-
-	if (!selectedBranch) {
+	if (!checkoutBranch) {
 		return;
 	}
 
 	let isNewBranch = false;
 	try {
-		if (currentBranch !== selectedBranch) {
+		if (currentBranch !== checkoutBranch) {
 			isNewBranch = true;
-			await git.checkout(selectedBranch);
+			await git.checkout(checkoutBranch);
 		}
 
 		if (!isNewBranch) {
-			const branchStatus = await git.getBranchStatus(selectedBranch);
+			const branchStatus = await git.getBranchStatus(checkoutBranch);
 
 			const shouldPull = await checkShouldPull(branchStatus);
 			if (shouldPull) {
-				await git.pull(selectedBranch);
+				await git.pull(checkoutBranch);
 			}
 		}
-
-		const { stdout: gitStatus } = await git.status();
-		const shouldStageAndCommit = !String(gitStatus).includes('nothing to commit');
 
 		if (shouldStageAndCommit) {
 			await git.stage();
 			await git.commit(inputCommitInfo);
 		}
 
-		await git.push(selectedBranch, [PushArg.SetUpstream]);
-		window.showInformationMessage(`Successfully pushed changes to ${selectedBranch}`);
+		await git.push(checkoutBranch, [PushArg.SetUpstream]);
+		window.showInformationMessage(`Successfully pushed changes to ${checkoutBranch}`);
 	} catch (error) {
 		const message = error.message || 'An unexpected error occured';
 		window.showErrorMessage(message);
 	}
 }
 
-async function setSelectedBranch(currentBranch: string, commitMessage: string) {
-	const branchName = commitMessage.replace(/\s/g, '-');
-
+async function getCheckoutBranch(currentBranch: string, commitMessage: string) {
 	if (currentBranch.startsWith('master')) {
+		const branchName = commitMessage ? commitMessage.replace(/\s/g, '-') : currentBranch;
+		const pushToShownBranch = 'push to shown branch';
 		const selection = await window.showInformationMessage(
-			`Current branch is master. Do you want to push to ${branchName} instead?`, 'push to shown branch', 'push to master'
+			`Current branch is master. Do you want to push to ${branchName} instead?`,
+			pushToShownBranch,
+			'push to master'
 		);
-		return selection === 'push to shown branch'
+		return selection === pushToShownBranch
 			? branchName
 			: 'master';
 	}
