@@ -1,7 +1,7 @@
 ## 1.0.1
 
 * Fixed security vulnerability with NPM-dependency.
-* Bumped vscode lower version requirement to `1.31.0`, to use new extension API functions.
+* Bumped vscode lower version requirement to `1.31.0`, to use new extension API functions and get rid `opn` npm package (built in functionality now).
 * Small code optimisations.
 * Fix repeatingly pushing to Git when using `Commit and push` command.
 * Fix issue trying to commit- and stage changes, if there are none - still allow pushing, even without no current changes, but with already commited changes.
