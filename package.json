@@ -2,7 +2,7 @@
     "name": "vscode-tcmerge",
     "displayName": "vscode-tcmerge",
     "description": "easily integrate git and github with vscode",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "engines": {
         "vscode": "^1.31.0"
     },
@@ -50,8 +50,8 @@
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test",
-		"postversion": "git push && git push --tags"
+        "test": "npm run compile && node ./node_modules/vscode/bin/test",
+        "postversion": "git push && git push --tags"
     },
     "devDependencies": {
         "@types/mocha": "2.2.42",
