@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Fix security issues with dependency.
+
 ## 1.0.1
 
 * Fixed security vulnerability with NPM-dependency.
