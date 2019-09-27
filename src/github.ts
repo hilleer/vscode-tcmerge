@@ -27,8 +27,8 @@ export default class Github {
 
 		if (json.message && json.message === 'Validation Failed') {
 			const message: string = json.errors[0].message;
-			const doesPullRequestExist = message && /pull request already exists/i.test(message);
-			const error = doesPullRequestExist
+			const isPullRequestExistError = message && /pull request already exists/i.test(message);
+			const error = isPullRequestExistError
 				? new GithubPullRequestExistError(message)
 				: new GithubValidationFailedError(message);
 			throw error;
