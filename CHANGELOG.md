@@ -1,3 +1,7 @@
+## 1.0.3
+
+* **Create pull request:** When trying to create a pull request for a branch that already exists, an option to open that pull request will be given.
+
 ## 1.0.2
 
 * Fix security issues with dependency.
