@@ -47,7 +47,7 @@ export async function main({ github, accessToken, git }: CreatePullRequestArgs):
 		const { html_url } = await github.createPullRequest(pullRequestTitle, currentBranch, githubAccessToken);
 		const selection = await window.showInformationMessage(
 			'Successfully created pull request!',
-			'close',
+			'Close',
 			OPEN_PULL_REQUEST
 		);
 		if (selection === OPEN_PULL_REQUEST && html_url) {
@@ -60,39 +60,30 @@ export async function main({ github, accessToken, git }: CreatePullRequestArgs):
 
 async function setAccessToken(accessToken: AccessToken): Promise<boolean> {
 	const setAccessTokenAnswer = await window.showInformationMessage('Access token not set yet. Do you want to set it now?', 'Close', 'Yes');
-	switch (setAccessTokenAnswer) {
-		case 'Yes':
-			try {
-				const inputAccessToken = await getAccesstokenFromInput();
-				await accessToken.setAccessToken(inputAccessToken);
-
-				const createPullRequestNow = await window.showInformationMessage('Access token set! Create pull request now?', 'Close', 'Yes');
-
-				if (createPullRequestNow === 'Yes') {
-					return true;
-				}
-			} catch (error) {
-				window.showErrorMessage(error);
-				return false;
+	if (setAccessTokenAnswer === 'Yes') {
+		try {
+			const inputAccessToken = await getAccesstokenFromInput();
+			await accessToken.setAccessToken(inputAccessToken);
+	
+			const createPullRequestNow = await window.showInformationMessage('Access token set! Create pull request now?', 'Close', 'Yes');
+	
+			if (createPullRequestNow === 'Yes') {
+				return true;
 			}
-		default:
+		} catch (error) {
+			window.showErrorMessage(error);
 			return false;
+		}
 	}
+
+	return false;
 }
 
 async function showErrorMessage(error: any) {
 	return window.showErrorMessage(error);
 }
 
-type CreatePullRequestError =
-	GithubNotFoundError
-	| GithubBadCredentialsError
-	| GithubPullRequestExistError
-	| GithubBadCredentialsError
-	| Error
-	| any;
-
-async function handleError(error: CreatePullRequestError, github: Github, currentBranch: string, githubAccessToken: string) {
+async function handleError(error: any, github: Github, currentBranch: string, githubAccessToken: string) {
 	if (error instanceof GithubPullRequestExistError) {
 		const openPullRequestSelection = await window.showErrorMessage(
 			error.message,
