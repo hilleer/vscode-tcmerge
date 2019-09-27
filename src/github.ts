@@ -26,21 +26,62 @@ export default class Github {
 		const json = await res.json();
 
 		if (json.message && json.message === 'Validation Failed') {
-			throw json.errors[0].message;
+			const message: string = json.errors[0].message;
+			const doesPullRequestExist = message && /pull request already exists/i.test(message);
+			const error = doesPullRequestExist
+				? new GithubPullRequestExistError(message)
+				: new GithubValidationFailedError(message);
+			throw error;
 		}
 		if (json.message === 'Bad credentials') {
-			throw new Error('Github authorization failed. Please make sure your token was given necessary rights');
+			throw new GithubBadCredentialsError('Github authorization failed. Please make sure your token was given necessary rights');
 		}
 
 		if (json.message === 'Not Found') {
-			throw new Error('Failed to create pull request. If problem persist, try updating your access token');
+			throw new GithubNotFoundError('Failed to create pull request. If problem persist, try updating your access token');
 		}
 
 		return json;
 	}
 
-	public async listPullRequests(accessToken: string) {
-		const res = await fetch(`${this.baseUrl}/repos/hilleer/vscode-nocms-test/pulls?access_token=${accessToken}`);
+	public async getBranchPullRequestUrl(branch: string, accessToken: string) {
+		const pullRequests: any[] = await this.listPullRequests(accessToken);
+
+		if (!pullRequests || pullRequests.length < 0) {
+			return null;
+		}
+
+		const pullRequest = pullRequests.find(pr => pr && pr.head && pr.head.ref === branch);
+
+		return pullRequest.html_url;
+	}
+
+	private async listPullRequests(accessToken: string) {
+		const res = await fetch(`${this.baseUrl}/repos/${this.owner}/${this.origin}/pulls?access_token=${accessToken}`);
 		return res.json();
+	}
+}
+
+export class GithubNotFoundError extends Error {
+	constructor(message: string) {
+		super(message);
+	}
+}
+
+export class GithubBadCredentialsError extends Error {
+	constructor(message: string) {
+		super(message);
+	}
+}
+
+export class GithubValidationFailedError extends Error {
+	constructor(message: string) {
+		super(message);
+	}
+}
+
+export class GithubPullRequestExistError extends Error {
+	constructor(message: string) {
+		super(message);
 	}
 }

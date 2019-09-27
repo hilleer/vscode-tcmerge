@@ -1,6 +1,6 @@
 import { window, env, Uri } from 'vscode';
 
-import Github, { } from '../github';
+import Github, { GithubPullRequestExistError, GithubNotFoundError, GithubBadCredentialsError } from '../github';
 import { AccessToken } from '../accessToken';
 import { getAccesstokenFromInput } from './accessToken';
 import { Git } from '../Git';
@@ -10,6 +10,8 @@ type CreatePullRequestArgs = {
 	accessToken: AccessToken;
 	git: Git;
 };
+
+const OPEN_PULL_REQUEST = 'Open pull request';
 
 export async function main({ github, accessToken, git }: CreatePullRequestArgs): Promise<void> {
 
@@ -46,17 +48,13 @@ export async function main({ github, accessToken, git }: CreatePullRequestArgs):
 		const selection = await window.showInformationMessage(
 			'Successfully created pull request!',
 			'close',
-			'Open pull request'
+			OPEN_PULL_REQUEST
 		);
-		if (selection === 'Open pull request' && html_url) {
+		if (selection === OPEN_PULL_REQUEST && html_url) {
 			env.openExternal(Uri.parse(html_url));
 		}
 	} catch (error) {
-		if (error.message) {
-			showErrorMessage(error.message);
-			return;
-		}
-		showErrorMessage(error);
+		await handleError(error, github, currentBranch, githubAccessToken);
 	}
 }
 
@@ -84,4 +82,30 @@ async function setAccessToken(accessToken: AccessToken): Promise<boolean> {
 
 async function showErrorMessage(error: any) {
 	return window.showErrorMessage(error);
+}
+
+type CreatePullRequestError =
+	GithubNotFoundError
+	| GithubBadCredentialsError
+	| GithubPullRequestExistError
+	| GithubBadCredentialsError
+	| Error
+	| any;
+
+async function handleError(error: CreatePullRequestError, github: Github, currentBranch: string, githubAccessToken: string) {
+	if (error instanceof GithubPullRequestExistError) {
+		const openPullRequestSelection = await window.showErrorMessage(
+			error.message,
+			OPEN_PULL_REQUEST
+		);
+		const shouldOpenPullRequest = openPullRequestSelection === OPEN_PULL_REQUEST;
+		const pullRequestUrl = await github.getBranchPullRequestUrl(currentBranch, githubAccessToken);
+		shouldOpenPullRequest && env.openExternal(Uri.parse(pullRequestUrl));
+		return;
+	}
+	if (error.message) {
+		showErrorMessage(error.message);
+		return;
+	}
+	showErrorMessage(error);
 }
