@@ -59,14 +59,23 @@ export async function main({ github, accessToken, git }: CreatePullRequestArgs):
 }
 
 async function setAccessToken(accessToken: AccessToken): Promise<boolean> {
-	const setAccessTokenAnswer = await window.showInformationMessage('Access token not set yet. Do you want to set it now?', 'Close', 'Yes');
+	const setAccessTokenAnswer = await window.showInformationMessage(
+		'Access token not set yet. Do you want to set it now?',
+		'Close',
+		'Yes'
+	);
+
 	if (setAccessTokenAnswer === 'Yes') {
 		try {
 			const inputAccessToken = await getAccesstokenFromInput();
 			await accessToken.setAccessToken(inputAccessToken);
-	
-			const createPullRequestNow = await window.showInformationMessage('Access token set! Create pull request now?', 'Close', 'Yes');
-	
+
+			const createPullRequestNow = await window.showInformationMessage(
+				'Access token set! Create pull request now?',
+				'Close',
+				'Yes'
+			);
+
 			if (createPullRequestNow === 'Yes') {
 				return true;
 			}
