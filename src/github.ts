@@ -51,7 +51,8 @@ export default class Github {
 			return null;
 		}
 
-		const pullRequest = pullRequests.find(pr => pr && pr.head && pr.head.ref === branch);
+		const isPullRequest = (pr: any) => pr && pr.head && pr.head.ref && pr.head.ref === branch;
+		const pullRequest = pullRequests.find(isPullRequest);
 
 		return pullRequest.html_url;
 	}
