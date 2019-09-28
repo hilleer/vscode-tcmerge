@@ -100,7 +100,7 @@ async function handleError(error: any, github: Github, currentBranch: string, gi
 		);
 		const shouldOpenPullRequest = openPullRequestSelection === OPEN_PULL_REQUEST;
 		const pullRequestUrl = await github.getBranchPullRequestUrl(currentBranch, githubAccessToken);
-		shouldOpenPullRequest && env.openExternal(Uri.parse(pullRequestUrl));
+		shouldOpenPullRequest && pullRequestUrl && env.openExternal(Uri.parse(pullRequestUrl));
 		return;
 	}
 	if (error.message) {
