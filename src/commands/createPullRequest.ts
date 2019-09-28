@@ -94,12 +94,12 @@ async function showErrorMessage(error: any) {
 
 async function handleError(error: any, github: Github, currentBranch: string, githubAccessToken: string) {
 	if (error instanceof GithubPullRequestExistError) {
+		const pullRequestUrl = await github.getBranchPullRequestUrl(currentBranch, githubAccessToken);
 		const openPullRequestSelection = await window.showErrorMessage(
 			error.message,
-			OPEN_PULL_REQUEST
+			(pullRequestUrl && OPEN_PULL_REQUEST) || null
 		);
 		const shouldOpenPullRequest = openPullRequestSelection === OPEN_PULL_REQUEST;
-		const pullRequestUrl = await github.getBranchPullRequestUrl(currentBranch, githubAccessToken);
 		shouldOpenPullRequest && pullRequestUrl && env.openExternal(Uri.parse(pullRequestUrl));
 		return;
 	}
