@@ -1,4 +1,4 @@
-## 1.0.3
+## 1.1.0
 
 * **Create pull request:** When trying to create a pull request for a branch that already exists, an option to open that pull request will be given.
 
