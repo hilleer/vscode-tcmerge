@@ -1,8 +1,6 @@
 # vscode-tcmerge
 
-_Note:_ This extension is in its early phase. If you find bugs, have feature requests or good ideas, please create [an issue](https://github.com/hilleer/vscode-tcmerge/issues).
-
-This extension is highly inspired by the CLI package [debitoor/tcmerge](https://github.com/debitoor/tcmerge).
+If you find bugs, have feature requests, have good ideas or just anything else please create [an issue](https://github.com/hilleer/vscode-tcmerge/issues).
 
 ## Commands
 

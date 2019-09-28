@@ -1,6 +1,6 @@
 import { window, env, Uri } from 'vscode';
 
-import Github, { } from '../github';
+import Github, { GithubPullRequestExistError, GithubNotFoundError, GithubBadCredentialsError } from '../github';
 import { AccessToken } from '../accessToken';
 import { getAccesstokenFromInput } from './accessToken';
 import { Git } from '../Git';
@@ -10,6 +10,8 @@ type CreatePullRequestArgs = {
 	accessToken: AccessToken;
 	git: Git;
 };
+
+const OPEN_PULL_REQUEST = 'Open pull request';
 
 export async function main({ github, accessToken, git }: CreatePullRequestArgs): Promise<void> {
 
@@ -45,43 +47,66 @@ export async function main({ github, accessToken, git }: CreatePullRequestArgs):
 		const { html_url } = await github.createPullRequest(pullRequestTitle, currentBranch, githubAccessToken);
 		const selection = await window.showInformationMessage(
 			'Successfully created pull request!',
-			'close',
-			'Open pull request'
+			'Close',
+			OPEN_PULL_REQUEST
 		);
-		if (selection === 'Open pull request' && html_url) {
+		if (selection === OPEN_PULL_REQUEST && html_url) {
 			env.openExternal(Uri.parse(html_url));
 		}
 	} catch (error) {
-		if (error.message) {
-			showErrorMessage(error.message);
-			return;
-		}
-		showErrorMessage(error);
+		await handleError(error, github, currentBranch, githubAccessToken);
 	}
 }
 
+// TODO: Refactor - split out responsibility.
 async function setAccessToken(accessToken: AccessToken): Promise<boolean> {
-	const setAccessTokenAnswer = await window.showInformationMessage('Access token not set yet. Do you want to set it now?', 'Close', 'Yes');
-	switch (setAccessTokenAnswer) {
-		case 'Yes':
-			try {
-				const inputAccessToken = await getAccesstokenFromInput();
-				await accessToken.setAccessToken(inputAccessToken);
+	const setAccessTokenAnswer = await window.showInformationMessage(
+		'Access token not set yet. Do you want to set it now?',
+		'Close',
+		'Yes'
+	);
 
-				const createPullRequestNow = await window.showInformationMessage('Access token set! Create pull request now?', 'Close', 'Yes');
+	if (setAccessTokenAnswer === 'Yes') {
+		try {
+			const inputAccessToken = await getAccesstokenFromInput();
+			await accessToken.setAccessToken(inputAccessToken);
 
-				if (createPullRequestNow === 'Yes') {
-					return true;
-				}
-			} catch (error) {
-				window.showErrorMessage(error);
-				return false;
+			const createPullRequestNow = await window.showInformationMessage(
+				'Access token set! Create pull request now?',
+				'Close',
+				'Yes'
+			);
+
+			if (createPullRequestNow === 'Yes') {
+				return true;
 			}
-		default:
+		} catch (error) {
+			window.showErrorMessage(error);
 			return false;
+		}
 	}
+
+	return false;
 }
 
 async function showErrorMessage(error: any) {
 	return window.showErrorMessage(error);
+}
+
+async function handleError(error: any, github: Github, currentBranch: string, githubAccessToken: string) {
+	if (error instanceof GithubPullRequestExistError) {
+		const pullRequestUrl = await github.getBranchPullRequestUrl(currentBranch, githubAccessToken);
+		const openPullRequestSelection = await window.showErrorMessage(
+			error.message,
+			(pullRequestUrl && OPEN_PULL_REQUEST) || null
+		);
+		const shouldOpenPullRequest = openPullRequestSelection === OPEN_PULL_REQUEST;
+		shouldOpenPullRequest && pullRequestUrl && env.openExternal(Uri.parse(pullRequestUrl));
+		return;
+	}
+	if (error.message) {
+		showErrorMessage(error.message);
+		return;
+	}
+	showErrorMessage(error);
 }
