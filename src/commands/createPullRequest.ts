@@ -1,6 +1,6 @@
 import { window, env, Uri } from 'vscode';
 
-import Github, { GithubPullRequestExistError, GithubNotFoundError, GithubBadCredentialsError } from '../github';
+import Github, { GithubPullRequestExistError } from '../github';
 import { AccessToken } from '../accessToken';
 import { getAccesstokenFromInput } from './accessToken';
 import { Git } from '../Git';
