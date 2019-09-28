@@ -58,6 +58,7 @@ export async function main({ github, accessToken, git }: CreatePullRequestArgs):
 	}
 }
 
+// TODO: Refactor - split out responsibility.
 async function setAccessToken(accessToken: AccessToken): Promise<boolean> {
 	const setAccessTokenAnswer = await window.showInformationMessage(
 		'Access token not set yet. Do you want to set it now?',
