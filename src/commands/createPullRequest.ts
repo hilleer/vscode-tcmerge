@@ -94,6 +94,7 @@ async function showErrorMessage(error: any) {
 }
 
 async function handleError(error: any, github: Github, currentBranch: string, githubAccessToken: string) {
+	console.error(error);
 	if (error instanceof GithubPullRequestExistError) {
 		const pullRequestUrl = await github.getBranchPullRequestUrl(currentBranch, githubAccessToken);
 		const openPullRequestSelection = await window.showErrorMessage(
