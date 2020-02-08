@@ -1,3 +1,7 @@
+## 1.2.0
+
+* **Create pull request:** Fix deprecated warning from GitHub when supplying token in query param.
+
 ## 1.1.0
 
 * **Create pull request:** When trying to create a pull request for a branch that already exists, an option to open that pull request will be given.
