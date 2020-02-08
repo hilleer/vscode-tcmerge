@@ -14,9 +14,10 @@ export default class Github {
 	}
 
 	public async createPullRequest(title: string, head: string, accessToken: string) {
-		const url = `${this.baseUrl}/repos/${this.owner}/${this.origin}/pulls?access_token=${accessToken}`;
+		const url = `${this.baseUrl}/repos/${this.owner}/${this.origin}/pulls`;
 		const res = await fetch(url, {
 			method: 'POST',
+			headers: { Authorization: `token ${accessToken}` },
 			body: JSON.stringify({
 				title, // required; Title of the pull request: string
 				head, // required: The name of the branch where your changes are implemented: string
