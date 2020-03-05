@@ -1,6 +1,6 @@
 # vscode-tcmerge
 
-If you find bugs, have feature requests, have good ideas or just anything else please create [an issue](https://github.com/hilleer/vscode-tcmerge/issues).
+If you find bugs, have feature requests, have good ideas or just anything else please [create an issue](https://github.com/hilleer/vscode-tcmerge/issues).
 
 ## Commands
 
