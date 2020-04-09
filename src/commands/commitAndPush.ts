@@ -13,13 +13,13 @@ export async function main({ git }: CommitAndPushArgs): Promise<void> {
 	}, (progress) => doCheckoutCommitPush(git, progress));
 }
 
-async function doCheckoutCommitPush(git: Git, progress: Progress<{ message?: string, increment?: number }>) {
+async function doCheckoutCommitPush(git: Git, progress: Progress<{ message?: string }>) {
 	progress.report({ message: 'git status' });
 
 	const { stdout: gitStatus } = await git.status();
 	const shouldStageAndCommit = !String(gitStatus).includes('nothing to commit');
 
-	progress.report({ message: 'get commit info', increment: 10 });
+	progress.report({ message: 'get commit info' });
 
 	let inputCommitInfo: string;
 	if (shouldStageAndCommit) {
@@ -34,7 +34,7 @@ async function doCheckoutCommitPush(git: Git, progress: Progress<{ message?: str
 		inputCommitInfo = inputCommitInfo.trim();
 	}
 
-	progress.report({ message: 'get checkout branch', increment: 10 });
+	progress.report({ message: 'get checkout branch' });
 
 	const currentBranch = await git.getCurrentBranch();
 
@@ -47,14 +47,14 @@ async function doCheckoutCommitPush(git: Git, progress: Progress<{ message?: str
 	let isNewBranch = false;
 	try {
 		if (currentBranch !== checkoutBranch) {
-			progress.report({ message: `git checkout ${checkoutBranch}`, increment: 10 });
+			progress.report({ message: `git checkout ${checkoutBranch}` });
 
 			isNewBranch = true;
 			await git.checkout(checkoutBranch);
 		}
 
 		if (!isNewBranch) {
-			progress.report({ message: 'is branch up to date', increment: 10 });
+			progress.report({ message: 'is branch up to date' });
 			const branchStatus = await git.getBranchStatus(checkoutBranch);
 
 			const shouldPull = await checkShouldPull(branchStatus);
@@ -64,13 +64,14 @@ async function doCheckoutCommitPush(git: Git, progress: Progress<{ message?: str
 		}
 
 		if (shouldStageAndCommit) {
-			progress.report({ message: 'stage changes', increment: 10 });
+			progress.report({ message: 'stage changes' });
 			await git.stage();
-			progress.report({ message: 'commit changes', increment: 10 });
+
+			progress.report({ message: 'commit changes' });
 			await git.commit(inputCommitInfo);
 		}
 
-		progress.report({ message: 'push changes', increment: 10 });
+		progress.report({ message: 'push changes' });
 		await git.push(checkoutBranch, [PushArg.SetUpstream]);
 		window.showInformationMessage(`Successfully pushed changes to ${checkoutBranch}`);
 	} catch (error) {
