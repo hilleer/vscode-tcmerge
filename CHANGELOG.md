@@ -1,3 +1,13 @@
+## [1.3.0] 2020-04-09
+
+### Added
+
+* Commit and push status in window.
+
+### Changed
+
+* bundle extension - reduce amount of files.
+
 ## 1.2.0
 
 * **Create pull request:** Fix deprecated warning from GitHub when supplying token in query param.
