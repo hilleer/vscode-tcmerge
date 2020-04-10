@@ -16,7 +16,7 @@
         "onCommand:extension.accessToken",
         "workspaceContains:.git"
     ],
-    "main": "./dist/extension",
+    "main": "./dist/extension.js",
     "publisher": "hilleer",
     "contributes": {
         "configuration": [

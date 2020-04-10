@@ -1,10 +1,15 @@
 'use strict';
-import { window, commands, Disposable, workspace } from 'vscode';
+import { window, commands, workspace } from 'vscode';
 
 import Github from './github';
 import { AccessToken, createAccessTokenDir } from './accessToken';
 import { Git } from './Git';
 import { ChildProcess } from './childProcess';
+
+import { main as commitAndPushCommand } from './commands/commitAndPush';
+import { main as accessTokenCommand } from './commands/accessToken';
+import { main as createPullRequestCommand } from './commands/createPullRequest';
+import { main as createReadyBranchCommand } from './commands/createReadyBranch';
 
 export async function activate() {
 	const childProcess = new ChildProcess(workspace.rootPath);
@@ -18,15 +23,10 @@ export async function activate() {
 	const accessToken = new AccessToken();
 	const github = new Github(gitDetails);
 
-	registerCommand('./commands/commitAndPush', 'commitAndPush', { git });
-	registerCommand('./commands/createReadyBranch', 'createReadyBranch', { git });
-	registerCommand('./commands/accessToken', 'accessToken', { accessToken });
-	registerCommand('./commands/createPullRequest', 'createPullRequest', { github, accessToken, git });
-}
-
-function registerCommand(activationPath: string, activationName: string, args: any): Disposable {
-	const activation = require(activationPath);
-	return commands.registerCommand(`extension.${activationName}`, () => activation.main(args));
+	commands.registerCommand('extension.accessToken', () => accessTokenCommand({ accessToken }));
+	commands.registerCommand('extension.commitAndPush', () => commitAndPushCommand({ git }));
+	commands.registerCommand('extension.createReadyBranch', () => createReadyBranchCommand({ git }));
+	commands.registerCommand('extension.createPullRequest', () => createPullRequestCommand({ git, github, accessToken }));
 }
 
 // this method is called when your extension is deactivated
