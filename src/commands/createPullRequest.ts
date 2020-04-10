@@ -1,4 +1,4 @@
-import { window, env, Uri } from 'vscode';
+import { window, env, Uri, workspace } from 'vscode';
 
 import Github, { GithubPullRequestExistError } from '../github';
 import { AccessToken } from '../accessToken';
@@ -11,9 +11,16 @@ type CreatePullRequestArgs = {
 	git: Git;
 };
 
+enum PullRequestType {
+	Draft = 'Draft',
+	Regular = 'Regular'
+}
+
 const OPEN_PULL_REQUEST = 'Open pull request';
 
 export async function main({ github, accessToken, git }: CreatePullRequestArgs): Promise<void> {
+	const config = workspace.getConfiguration();
+	const useDraftPullRequest = config.get('tcmerge.useDraftPullRequest');
 
 	const currentBranch = await git.getCurrentBranch();
 
@@ -44,7 +51,16 @@ export async function main({ github, accessToken, git }: CreatePullRequestArgs):
 			return;
 		}
 
-		const { html_url } = await github.createPullRequest(pullRequestTitle, currentBranch, githubAccessToken);
+		let draftPullRequest = false;
+		if (useDraftPullRequest) {
+			const draftResponse = await window.showInformationMessage('Please select pull request type', PullRequestType.Draft, PullRequestType.Regular);
+			
+			if (draftResponse === PullRequestType.Draft) {
+				draftPullRequest = true;
+			}
+		}
+
+		const { html_url } = await github.createPullRequest(pullRequestTitle, currentBranch, githubAccessToken, draftPullRequest);
 		const selection = await window.showInformationMessage(
 			'Successfully created pull request!',
 			'Close',

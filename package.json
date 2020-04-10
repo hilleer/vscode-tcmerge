@@ -23,7 +23,13 @@
             {
                 "title": "vscode-tcmerge configuration",
                 "description": "configuration for vscode-tcmerge extension",
-                "properties": {}
+                "properties": {
+                    "tcmerge.useDraftPullRequest": {
+                        "type": "boolean",
+                        "description": "Include Github draft pull request feature and include such prompt when creating pull requests",
+                        "default": true
+                    }
+                }
             }
         ],
         "commands": [
