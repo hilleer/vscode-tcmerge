@@ -2,7 +2,7 @@
     "name": "vscode-tcmerge",
     "displayName": "vscode-tcmerge",
     "description": "easily integrate git and github with vscode",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "engines": {
         "vscode": "^1.31.0"
     },
