@@ -13,7 +13,7 @@ export default class Github {
 		this.owner = owner;
 	}
 
-	public async createPullRequest(title: string, head: string, accessToken: string) {
+	public async createPullRequest(title: string, head: string, accessToken: string, isDraft: boolean) {
 		const url = `${this.baseUrl}/repos/${this.owner}/${this.origin}/pulls`;
 		const res = await fetch(url, {
 			method: 'POST',
@@ -22,6 +22,7 @@ export default class Github {
 				title, // required; Title of the pull request: string
 				head, // required: The name of the branch where your changes are implemented: string
 				base: 'master', // required: The name of the branch you want the changes pulled into. This should be an existing branch on the current repository. string
+				draft: isDraft
 			})
 		});
 		const json = await res.json();

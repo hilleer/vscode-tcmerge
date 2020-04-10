@@ -1,3 +1,10 @@
+## [1.4.0] 2020-04-10
+
+### Added
+
+* Make use of Github draft pull requests feature. Creating pull requests will now include a prompt to create pull request as a draft.
+* Added config to optionally disable draft pull requests.
+
 ## [1.3.0] 2020-04-09
 
 ### Added
