@@ -1,3 +1,9 @@
+## [1.4.1] 2020-04-10
+
+### Fixed
+
+* wrong `main` path breaking the extension.
+
 ## [1.4.0] 2020-04-10
 
 ### Added
