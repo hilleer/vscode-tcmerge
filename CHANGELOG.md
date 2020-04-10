@@ -1,3 +1,9 @@
+## [1.4.2] 2020-04-10
+
+### Fixed
+
+* Extension commands not loaded properly.
+
 ## [1.4.1] 2020-04-10
 
 ### Fixed
