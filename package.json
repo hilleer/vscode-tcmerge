@@ -76,7 +76,7 @@
         "webpack-cli": "3.3.11"
     },
     "dependencies": {
-        "node-fetch": "2.6.1"
+        "node-fetch": "2.6.7"
     },
     "repository": {
         "url": "https://github.com/hilleer/vscode-tcmerge",
